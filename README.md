@@ -1,8 +1,8 @@
-# 🌟 Campus Management System
+# 🌟 CampusNexus: Connecting Talent, Opportunities, and Success Seamlessly
 
 ## ✨ Project Name
 
-**Campus Management System**
+**CampusNexus: Connecting Talent, Opportunities, and Success Seamlessly**
 
 ---
 
