@@ -1,6 +1,7 @@
 package com.campus.services;
 
 import com.campus.entity.User;
+import com.campus.enums.UserRoles;
 import com.campus.model.LoginRequest;
 import com.campus.model.UserResponse;
 import com.campus.repository.UserRepository;
@@ -34,20 +35,66 @@ public class UserService {
     }
 
 
-    public ResponseEntity<User> createUser(User user) {
-        return ResponseEntity.ok(userRepository.save(user));
+    // Ensure there is always one default admin
+    public void createDefaultAdmin() {
+        if (userRepository.findByRole(UserRoles.ADMIN).isEmpty()) {
+            User admin = new User();
+            admin.setName("Default Admin");
+            admin.setEmail("admin@example.com");
+            admin.setPassword("admin@123"); // This should be hashed in production
+            admin.setRole(UserRoles.ADMIN);
+            admin.setVarified(true); // Admins are always verified
+            userRepository.save(admin);
+        }
     }
 
-    public ResponseEntity<User> updateUser(User user) {
-        return ResponseEntity.ok(userRepository.save(user));
+    // Register a coordinator
+    public User registerCoordinator(User coordinator) {
+        coordinator.setRole(UserRoles.COORDINATOR);
+        coordinator.setVarified(false); // Default to not verified
+        return userRepository.save(coordinator);
     }
 
-    public ResponseEntity<String> deleteUser(long id) {
-        userRepository.deleteById(id);
-        return ResponseEntity.ok("User deleted successfully");
+    // Verify coordinator
+    public User verifyCoordinator(Long id) {
+        Optional<User> optionalCoordinator = userRepository.findById(id);
+        if (optionalCoordinator.isPresent()) {
+            User coordinator = optionalCoordinator.get();
+            if (coordinator.getRole() == UserRoles.COORDINATOR) {
+                coordinator.setVarified(true);
+                return userRepository.save(coordinator);
+            } else {
+                throw new IllegalArgumentException("User is not a coordinator");
+            }
+        }
+        throw new IllegalArgumentException("Coordinator not found");
     }
 
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userRepository.findAll());
+    // Update user (admin or coordinator)
+    public User updateUser(Long id, User updatedUser) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setName(updatedUser.getName());
+            user.setEmail(updatedUser.getEmail());
+            user.setPassword(updatedUser.getPassword());
+            return userRepository.save(user);
+        }
+        throw new IllegalArgumentException("User not found");
+    }
+
+    // Delete coordinator
+    public void deleteCoordinator(Long id) {
+        Optional<User> optionalCoordinator = userRepository.findById(id);
+        if (optionalCoordinator.isPresent() && optionalCoordinator.get().getRole() == UserRoles.COORDINATOR) {
+            userRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("Coordinator not found or is not a coordinator");
+        }
+    }
+
+    // Get all coordinators
+    public List<User> getAllCoordinators() {
+        return userRepository.findByRole(UserRoles.COORDINATOR);
     }
 }
