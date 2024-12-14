@@ -1,10 +1,10 @@
 package com.campus.enums;
 
 public enum Streams {
-    IT,
-    COMP,
-    ENTC,
+    COMPUTER_SCIENCE,
+    INFORMATION_TECHNOLOGY,
+    MECHANICAL,
+    ELECTRICAL,
     CIVIL,
-    EE,
-    MECH
+    ELECTRONICS
 }

@@ -1,22 +1,34 @@
 package com.campus.entity;
 
-import lombok.AllArgsConstructor;
+import com.campus.enums.Streams;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 
 @Entity
-@Table(name = "student")
+@Table(name = "students")
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class Student {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private long register_id;
     private String fullName;
+    @Column(unique = true)
     private String email;
+
+
+    @Column(unique = true)
+    @Digits(integer = 10, fraction = 0, message = "Mobile number must be 10 digits")
     private long mobile;
+
     private String password;
-    private int rolNo;
+
+    @Enumerated(EnumType.STRING)
+    private Streams streams;
 
     //resume
     @Lob
