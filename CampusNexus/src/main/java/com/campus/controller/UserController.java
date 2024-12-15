@@ -2,6 +2,7 @@ package com.campus.controller;
 
 
 import com.campus.entity.User;
+import com.campus.model.UserResponse;
 import com.campus.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,19 +26,19 @@ public class UserController {
 
     // Register a new coordinator
     @PostMapping("/register-coordinator")
-    public ResponseEntity<User> registerCoordinator(@RequestBody User coordinator) {
+    public ResponseEntity<UserResponse> registerCoordinator(@RequestBody User coordinator) {
         return ResponseEntity.ok(userService.registerCoordinator(coordinator));
     }
 
     // Verify a coordinator
     @PutMapping("/verify-coordinator/{id}")
-    public ResponseEntity<User> verifyCoordinator(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> verifyCoordinator(@PathVariable Long id) {
         return ResponseEntity.ok(userService.verifyCoordinator(id));
     }
 
     // Update user details
     @PutMapping("/update/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
         return ResponseEntity.ok(userService.updateUser(id, updatedUser));
     }
 
@@ -50,7 +51,7 @@ public class UserController {
 
     // Get all coordinators
     @GetMapping("/coordinators")
-    public ResponseEntity<List<User>> getAllCoordinators() {
+    public ResponseEntity<List<UserResponse>> getAllCoordinators() {
         return ResponseEntity.ok(userService.getAllCoordinators());
     }
 

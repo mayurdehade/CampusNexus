@@ -15,7 +15,7 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private long register_id;
+    private Long register_id;
     private String fullName;
     @Column(unique = true)
     private String email;
@@ -23,7 +23,7 @@ public class Student {
 
     @Column(unique = true)
     @Digits(integer = 10, fraction = 0, message = "Mobile number must be 10 digits")
-    private long mobile;
+    private Long mobile;
 
     private String password;
 

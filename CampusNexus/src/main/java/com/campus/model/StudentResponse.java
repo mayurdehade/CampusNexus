@@ -1,6 +1,6 @@
 package com.campus.model;
 
-import com.campus.enums.UserRoles;
+import com.campus.enums.Streams;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,10 +10,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class UserResponse {
+public class StudentResponse {
     private Long id;
-    private String name;
+    private Long register_id;
+    private String fullName;
     private String email;
-    private UserRoles role;
-    private boolean isVarified;
+    private Long mobile;
+    private Streams streams;
+    private byte[] resume;
+    private byte[] image;
 }

@@ -5,7 +5,6 @@ import com.campus.enums.UserRoles;
 import com.campus.model.LoginRequest;
 import com.campus.model.UserResponse;
 import com.campus.repository.UserRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +30,11 @@ public class UserService {
         if(!isPasswordMatch) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid password");
         }
-        return ResponseEntity.ok(new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole()));
+        boolean isVarified = user.isVarified();
+        if(!isVarified) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("user not verified");
+        }
+        return ResponseEntity.ok(new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.isVarified()));
     }
 
 
@@ -39,8 +42,8 @@ public class UserService {
     public void createDefaultAdmin() {
         if (userRepository.findByRole(UserRoles.ADMIN).isEmpty()) {
             User admin = new User();
-            admin.setName("Default Admin");
-            admin.setEmail("admin@example.com");
+            admin.setName("Admin");
+            admin.setEmail("admin@campus.com");
             admin.setPassword("admin@123"); // This should be hashed in production
             admin.setRole(UserRoles.ADMIN);
             admin.setVarified(true); // Admins are always verified
@@ -49,20 +52,23 @@ public class UserService {
     }
 
     // Register a coordinator
-    public User registerCoordinator(User coordinator) {
+    public UserResponse registerCoordinator(User coordinator) {
         coordinator.setRole(UserRoles.COORDINATOR);
         coordinator.setVarified(false); // Default to not verified
-        return userRepository.save(coordinator);
+        User user = userRepository.save(coordinator);
+        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.isVarified());
     }
 
     // Verify coordinator
-    public User verifyCoordinator(Long id) {
+    public UserResponse verifyCoordinator(Long id) {
         Optional<User> optionalCoordinator = userRepository.findById(id);
+        User user = new User();
         if (optionalCoordinator.isPresent()) {
             User coordinator = optionalCoordinator.get();
             if (coordinator.getRole() == UserRoles.COORDINATOR) {
                 coordinator.setVarified(true);
-                return userRepository.save(coordinator);
+                user = userRepository.save(coordinator);
+                return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.isVarified());
             } else {
                 throw new IllegalArgumentException("User is not a coordinator");
             }
@@ -71,14 +77,15 @@ public class UserService {
     }
 
     // Update user (admin or coordinator)
-    public User updateUser(Long id, User updatedUser) {
+    public UserResponse updateUser(Long id, User updatedUser) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             user.setName(updatedUser.getName());
             user.setEmail(updatedUser.getEmail());
             user.setPassword(updatedUser.getPassword());
-            return userRepository.save(user);
+            User userRes = userRepository.save(user);
+            return new UserResponse(userRes.getId(), userRes.getName(), userRes.getEmail(), userRes.getRole(), userRes.isVarified());
         }
         throw new IllegalArgumentException("User not found");
     }
@@ -94,7 +101,8 @@ public class UserService {
     }
 
     // Get all coordinators
-    public List<User> getAllCoordinators() {
-        return userRepository.findByRole(UserRoles.COORDINATOR);
+    public List<UserResponse> getAllCoordinators() {
+        List<User> coordinators = userRepository.findByRole(UserRoles.COORDINATOR);
+        return coordinators.stream().map(coordinator -> new UserResponse(coordinator.getId(), coordinator.getName(), coordinator.getEmail(), coordinator.getRole(), coordinator.isVarified())).toList();
     }
 }
