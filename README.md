@@ -42,6 +42,9 @@
    ```
 4. 🧪 **Test the APIs** using Postman or any REST client.
 
+5. Access API
+   ```http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/```
+
 ---
 
 ## 📂 Project Structure
