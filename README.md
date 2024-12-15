@@ -1,8 +1,8 @@
-# 🌟 Campus Management System
+# 🌟 CampusNexus: Connecting Talent, Opportunities, and Success Seamlessly
 
 ## ✨ Project Name
 
-**Campus Management System**
+**CampusNexus: Connecting Talent, Opportunities, and Success Seamlessly**
 
 ---
 
@@ -18,7 +18,7 @@
 
 ## 👥 Contributors
 
-- **[Mayur Dehade](mailto:mayurdehade@example.com)**
+- **[Mayur Dehade](mailto:dehademayur9@gmail.com)**
 
 ---
 
