@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "job_applications")
@@ -18,16 +17,10 @@ public class JobApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long studentRegisterNo;
+    private Long studentId;
 
     private Long jobPostingId;
 
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status; // Example: APPLIED, APPROVED, REJECTED
-
-    @Column(nullable = false)
-    private LocalDateTime appliedAt; // Timestamp for application
-
-    @Column
-    private LocalDateTime updatedAt; // Timestamp for updates
 }
