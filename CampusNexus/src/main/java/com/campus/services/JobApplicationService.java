@@ -1,9 +1,12 @@
 package com.campus.services;
 
 import com.campus.entity.JobApplication;
+import com.campus.entity.Student;
 import com.campus.enums.ApplicationStatus;
 import com.campus.model.JobApplicationResponse;
 import com.campus.repository.JobApplicationRepository;
+import com.campus.repository.JobPostingRepository;
+import com.campus.repository.StudentRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 
@@ -22,6 +26,12 @@ public class JobApplicationService {
 
     @Autowired
     private JobApplicationRepository jobApplicationRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private JobPostingRepository jobPostingRepository;
 
     // Student applies for a job
     @Transactional
@@ -72,11 +82,14 @@ public class JobApplicationService {
         List<JobApplication> applications = jobApplicationRepository.findAll();
 
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Job Applications");
+        Sheet sheet = workbook.createSheet("Job Applications ");
 
         // Header row
         Row headerRow = sheet.createRow(0);
-        String[] headers = {"Application ID", "Student Register No", "Student Name", "Email", "Job Posting ID", "Status", "Applied At", "Updated At"};
+        String[] headers = {
+                "Application ID", "Student Register No", "Full Name", "Email", "Mobile",
+                "Stream", "Application Status", "Applied At", "Updated At"
+        };
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(headers[i]);
@@ -85,16 +98,23 @@ public class JobApplicationService {
         // Data rows
         int rowNum = 1;
         for (JobApplication application : applications) {
-            Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(application.getId());
-            row.createCell(1).setCellValue(application.getStudentRegisterNo());
-            // Fetch additional student details (mocked here; replace with actual data)
-            row.createCell(2).setCellValue("Student Name"); // Replace with actual student name
-            row.createCell(3).setCellValue("student@example.com"); // Replace with actual student email
-            row.createCell(4).setCellValue(application.getJobPostingId());
-            row.createCell(5).setCellValue(application.getStatus().toString());
-            row.createCell(6).setCellValue(application.getAppliedAt().toString());
-            row.createCell(7).setCellValue(application.getUpdatedAt() != null ? application.getUpdatedAt().toString() : "");
+            // Fetch the student details based on the student register number
+            Optional<Student> optionalStudent = studentRepository.findByRegisterNo(application.getStudentRegisterNo());
+
+            Student student = optionalStudent.get();
+
+            if (student != null) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(application.getId());
+                row.createCell(1).setCellValue(application.getStudentRegisterNo());
+                row.createCell(2).setCellValue(student.getFullName());
+                row.createCell(3).setCellValue(student.getEmail());
+                row.createCell(4).setCellValue(student.getMobile());
+                row.createCell(5).setCellValue(student.getStreams().toString());
+                row.createCell(6).setCellValue(application.getStatus().toString());
+                row.createCell(7).setCellValue(application.getAppliedAt().toString());
+                row.createCell(8).setCellValue(application.getUpdatedAt() != null ? application.getUpdatedAt().toString() : "");
+            }
         }
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -105,14 +125,20 @@ public class JobApplicationService {
 
     // Fetch applications by job posting ID and export details to Excel
     public byte[] exportApplicationsByJobToExcel(Long jobPostingId) throws Exception {
+        // Fetch all job applications for the specific job ID
         List<JobApplication> applications = jobApplicationRepository.findByJobPostingId(jobPostingId);
 
+        // Fetch students based on job application studentRegisterNo
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Job Applications - Job ID " + jobPostingId);
+        String sheetName = "Job_Applications_For_"+jobPostingRepository.findById(jobPostingId).get().getCompanyName();
+        Sheet sheet = workbook.createSheet(sheetName);
 
         // Header row
         Row headerRow = sheet.createRow(0);
-        String[] headers = {"Application ID", "Student Register No", "Student Name", "Email", "Job Posting ID", "Status", "Applied At", "Updated At"};
+        String[] headers = {
+                "Application ID", "Student Register No", "Full Name", "Email", "Mobile",
+                "Stream", "Application Status", "Applied At", "Updated At"
+        };
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(headers[i]);
@@ -121,16 +147,23 @@ public class JobApplicationService {
         // Data rows
         int rowNum = 1;
         for (JobApplication application : applications) {
-            Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(application.getId());
-            row.createCell(1).setCellValue(application.getStudentRegisterNo());
-            // Fetch additional student details (mocked here; replace with actual data)
-            row.createCell(2).setCellValue("Student Name"); // Replace with actual student name
-            row.createCell(3).setCellValue("student@example.com"); // Replace with actual student email
-            row.createCell(4).setCellValue(application.getJobPostingId());
-            row.createCell(5).setCellValue(application.getStatus().toString());
-            row.createCell(6).setCellValue(application.getAppliedAt().toString());
-            row.createCell(7).setCellValue(application.getUpdatedAt() != null ? application.getUpdatedAt().toString() : "");
+            // Fetch the student details based on the student register number
+            Optional<Student> optionalStudent = studentRepository.findByRegisterNo(application.getStudentRegisterNo());
+
+            Student student = optionalStudent.get();
+
+            if (student != null) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(application.getId());
+                row.createCell(1).setCellValue(application.getStudentRegisterNo());
+                row.createCell(2).setCellValue(student.getFullName());
+                row.createCell(3).setCellValue(student.getEmail());
+                row.createCell(4).setCellValue(student.getMobile());
+                row.createCell(5).setCellValue(student.getStreams().toString());
+                row.createCell(6).setCellValue(application.getStatus().toString());
+                row.createCell(7).setCellValue(application.getAppliedAt().toString());
+                row.createCell(8).setCellValue(application.getUpdatedAt() != null ? application.getUpdatedAt().toString() : "");
+            }
         }
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
