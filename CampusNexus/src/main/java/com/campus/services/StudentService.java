@@ -1,11 +1,7 @@
 package com.campus.services;
 
 import com.campus.entity.Student;
-import com.campus.enums.UserRoles;
-import com.campus.model.LoginRequest;
-import com.campus.model.RegisterStudentReq;
-import com.campus.model.StudentResponse;
-import com.campus.model.UserResponse;
+import com.campus.model.*;
 import com.campus.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +31,20 @@ public class StudentService {
     }
 
     //create student
-    public StudentResponse addStudent(RegisterStudentReq req) {
+    public ResponseEntity<?> addStudent(RegisterStudentReq req) {
+        // Check for duplicate register ID
+        if (studentRepository.findByRegisterNo(req.getRegister_id()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new UserMessageResponse("register_id", "Register Number is already in use."));
+        }
+        // Check for duplicate email
+        if (studentRepository.findByEmail(req.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new UserMessageResponse("email", "Email is already in use."));
+        }
+        // Check for duplicate mobile
+        if (studentRepository.findByMobile(req.getMobile()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new UserMessageResponse("mobile", "Mobile number is already in use."));
+        }
+
         Student student = new Student();
         student.setRegisterNo(req.getRegister_id());
         student.setFullName(req.getFullName());
@@ -44,7 +53,7 @@ public class StudentService {
         student.setPassword(req.getPassword());
         student.setStreams(req.getStreams());
         student =  studentRepository.save(student);
-        return new StudentResponse(student.getId(), student.getRegisterNo(), student.getFullName(), student.getEmail(), student.getMobile(), student.getStreams(), student.getResume(), student.getImage());
+        return ResponseEntity.ok(new UserMessageResponse("success", "Student registered successfully."));
     }
 
     public StudentResponse getStudentByRegisterId(long id) {

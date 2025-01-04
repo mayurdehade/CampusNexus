@@ -1,15 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home/home.component';
-import { FloginComponent } from './faculty/flogin/flogin.component';
-import { RegistrationComponent } from './student/registration/registration.component';
+import { MainLoginComponent } from './shared/auth/main-login/main-login.component';
+import { FacultyLoginComponent } from './shared/auth/faculty/faculty-login/faculty-login.component';
+import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
+import { StudentDashboardComponent } from './layouts/student-layout/student-dashboard/student-dashboard.component';
+import { FacultyDashboardComponent } from './layouts/faculty-layout/faculty-dashboard/faculty-dashboard.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: MainLoginComponent },
+  { path: 'student/dashboard', component: StudentDashboardComponent },
+  { path: 'faculty/dashboard', component: FacultyDashboardComponent },
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

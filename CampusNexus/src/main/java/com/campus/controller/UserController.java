@@ -50,9 +50,16 @@ public class UserController {
     }
 
     // Get all coordinators
-    @GetMapping("/coordinators")
+    @GetMapping("/all-coordinators")
     public ResponseEntity<List<UserResponse>> getAllCoordinators() {
         return ResponseEntity.ok(userService.getAllCoordinators());
     }
+
+    @PostMapping("/update-password/")
+    public ResponseEntity<String> updatePassword(@RequestBody User user) {
+//        userService.updatePassword(user);
+        return ResponseEntity.ok("Password updated successfully");
+    }
+
 
 }

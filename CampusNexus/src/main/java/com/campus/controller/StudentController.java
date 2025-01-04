@@ -18,9 +18,9 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @PostMapping("/add")
-    public ResponseEntity<StudentResponse> addStudent(@Valid @RequestBody RegisterStudentReq req) {
-        return ResponseEntity.ok(studentService.addStudent(req));
+    @PostMapping("/register")
+    public ResponseEntity<?> addStudent(@Valid @RequestBody RegisterStudentReq req) {
+        return studentService.addStudent(req);
     }
 
     @GetMapping("/find/{res_id}")

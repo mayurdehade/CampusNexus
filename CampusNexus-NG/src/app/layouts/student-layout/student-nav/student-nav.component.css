@@ -1,0 +1,14 @@
+.active {
+  border-left-width: 4px;
+  border-color: #4c51bf;
+  color: white;
+}
+
+.nav-link {
+  color: #a0aec0;
+  transition: color 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  color: white;
+}
