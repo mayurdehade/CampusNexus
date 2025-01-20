@@ -1,6 +1,7 @@
 package com.campus.services;
 
 import com.campus.entity.Student;
+import com.campus.enums.Streams;
 import com.campus.model.*;
 import com.campus.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,27 +68,53 @@ public class StudentService {
         return student.stream().map(s -> new StudentResponse(s.getId(), s.getRegisterNo(), s.getFullName(), s.getEmail(), s.getMobile(), s.getStreams(), s.getResume(), s.getImage())).toList();
     }
 
-    public StudentResponse updateStudent(long id, Student student) {
+    public StudentResponse updateStudent(long id, StudentUpdateDto studentUpdateDto) {
         Optional<Student> dbStudent = studentRepository.findById(id);
-        Student existingStudent = getStudent(id, student, dbStudent);
+        Student existingStudent = getStudent(id, studentUpdateDto, dbStudent);
         Student studentRes = studentRepository.save(existingStudent);
         return new StudentResponse(studentRes.getId(), studentRes.getRegisterNo(), studentRes.getFullName(), studentRes.getEmail(), studentRes.getMobile(), studentRes.getStreams(), studentRes.getResume(), studentRes.getImage());
     }
 
     //method for updating student
-    private static Student getStudent(long id, Student student, Optional<Student> dbStudent) {
+    private static Student getStudent(long id, StudentUpdateDto studentUpdateDto, Optional<Student> dbStudent) {
         Student existingStudent = dbStudent.orElseThrow(() -> new NotFoundException("Student not found with id " + id));
-        existingStudent.setFullName(student.getFullName());
-        existingStudent.setEmail(student.getEmail());
-        existingStudent.setMobile(student.getMobile());
-        existingStudent.setPassword(student.getPassword());
-        existingStudent.setStreams(student.getStreams());
-        existingStudent.setImage(student.getImage());
-        existingStudent.setResume(student.getResume());
+        try {
+            existingStudent.setFullName(studentUpdateDto.getFullName());
+            existingStudent.setEmail(studentUpdateDto.getEmail());
+            existingStudent.setMobile(studentUpdateDto.getMobile());
+            existingStudent.setStreams(studentUpdateDto.getStreams());
+            existingStudent.setImage(studentUpdateDto.getImage().getBytes());
+            existingStudent.setResume(studentUpdateDto.getResume().getBytes());
+            existingStudent.setProfileSummary(studentUpdateDto.getProfileSummary());
+            existingStudent.setSkills(studentUpdateDto.getSkills());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return existingStudent;
     }
 
     public void deleteStudent(long id) {
         studentRepository.deleteById(id);
+    }
+
+    public StudentEditResponse getFullStudentById(long id) {
+        Optional<Student> student = studentRepository.findById(id);
+        if(student.isPresent()){
+            StudentEditResponse studentEditResponse = new StudentEditResponse();
+            studentEditResponse.setId(student.get().getId());
+            studentEditResponse.setRegisterNo(student.get().getRegisterNo());
+            studentEditResponse.setFullName(student.get().getFullName());
+            studentEditResponse.setEmail(student.get().getEmail());
+            studentEditResponse.setMobile(student.get().getMobile());
+            studentEditResponse.setStreams(student.get().getStreams());
+            studentEditResponse.setBirthDate(student.get().getBirthDate());
+            studentEditResponse.setResume(student.get().getResume());
+            studentEditResponse.setImage(student.get().getImage());
+            studentEditResponse.setProfileSummary(student.get().getProfileSummary());
+            studentEditResponse.setSkills(student.get().getSkills());
+            return studentEditResponse;
+        } else {
+            throw new NotFoundException("Student not found with id " + id);
+        }
     }
 }

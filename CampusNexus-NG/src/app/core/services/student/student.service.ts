@@ -13,4 +13,12 @@ export class StudentService {
   registerStudent(studentData: any): Observable<any> {
     return this.http.post(this.baseUrl + '/register', studentData);
   }
+
+  getProfile(id: number): Observable<any> {
+    return this.http.get<any>(this.baseUrl + `/student-edit/${id}`);
+  }
+
+  updateProfile(data: any, id: number): Observable<any> {
+    return this.http.put<any>(this.baseUrl + `/update/${id}`, data);
+  }
 }

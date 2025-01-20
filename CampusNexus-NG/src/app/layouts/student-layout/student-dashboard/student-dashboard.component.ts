@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -6,16 +7,26 @@ import { Component } from '@angular/core';
   styleUrls: ['./student-dashboard.component.css'],
 })
 export class StudentDashboardComponent {
-  studentData: any;
+  constructor(private router: Router) {}
 
-  constructor() {}
+  studentImage: string = '';
+  studentData: Object = {};
 
   ngOnInit(): void {
-    this.studentData = localStorage.getItem('student_Data');
-    if (this.studentData == null) {
-      window.location.href = '/';
+    const storedData = localStorage.getItem('student_Data');
+    const storedImage = localStorage.getItem('student_Image');
+
+    if (storedData) {
+      this.studentData = JSON.parse(storedData);
     }
-    this.studentData = JSON.parse(this.studentData);
-    // console.log(this.studentData.fullName);
+
+    if (storedImage) {
+      this.studentImage = storedImage;
+    }
+
+    //if student data not is local storage then don't allow to access dashboard
+    if (!storedData) {
+      this.router.navigate(['/']);
+    }
   }
 }

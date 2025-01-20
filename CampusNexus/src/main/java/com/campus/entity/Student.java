@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import java.util.Date;
 
 @Entity
 @Table(name = "students")
@@ -20,7 +21,6 @@ public class Student {
     @Column(unique = true)
     private String email;
 
-
     @Column(unique = true)
     @Digits(integer = 10, fraction = 0, message = "Mobile number must be 10 digits")
     private Long mobile;
@@ -30,13 +30,17 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private Streams streams;
 
+    private String birthDate;
+
     //resume
     @Lob
+    @Column(columnDefinition = "LONGBLOB")
     private byte[] resume;
 
     //profile image
     @Column(columnDefinition = "LONGBLOB")
     private byte[] image;
 
-
+    private String profileSummary;
+    private String skills;
 }

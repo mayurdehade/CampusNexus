@@ -14,7 +14,6 @@ import { FacultyLoginComponent } from './shared/auth/faculty/faculty-login/facul
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { StudentDashboardComponent } from './layouts/student-layout/student-dashboard/student-dashboard.component';
 import { UpdateStudentComponent } from './layouts/student-layout/update-student/update-student.component';
-import { StudentProfileComponent } from './layouts/student-layout/student-profile/student-profile.component';
 import { FacultyDashboardComponent } from './layouts/faculty-layout/faculty-dashboard/faculty-dashboard.component';
 import { FacultyProfileComponent } from './layouts/faculty-layout/faculty-profile/faculty-profile.component';
 import { ManageStudentsComponent } from './layouts/faculty-layout/manage-students/manage-students.component';
@@ -24,9 +23,9 @@ import { ManageJobApplicationsComponent } from './layouts/faculty-layout/manage-
 import { ExportApplicationDataComponent } from './layouts/faculty-layout/export-application-data/export-application-data.component';
 import { JobAlertComponent } from './layouts/faculty-layout/job-alert/job-alert.component';
 import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
-import { StudentNavComponent } from './layouts/student-layout/student-nav/student-nav.component';
-import { FacultyNavComponent } from './layouts/faculty-layout/faculty-nav/faculty-nav.component';
-import { StudentHeaderComponent } from './layouts/student-layout/student-header/student-header.component';
+import { StudentSidebarComponent } from './layouts/student-layout/student-sidebar/student-sidebar.component';
+import { FacultySidebarComponent } from './layouts/faculty-layout/faculty-sidebar/faculty-sidebar.component';
+import { StudentProfileComponent } from './layouts/student-layout/student-profile/student-profile.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +39,6 @@ import { StudentHeaderComponent } from './layouts/student-layout/student-header/
     MainLoginComponent,
     StudentDashboardComponent,
     UpdateStudentComponent,
-    StudentProfileComponent,
     FacultyDashboardComponent,
     FacultyProfileComponent,
     ManageStudentsComponent,
@@ -50,9 +48,9 @@ import { StudentHeaderComponent } from './layouts/student-layout/student-header/
     ExportApplicationDataComponent,
     JobAlertComponent,
     PageNotFoundComponent,
-    StudentNavComponent,
-    FacultyNavComponent,
-    StudentHeaderComponent,
+    StudentSidebarComponent,
+    FacultySidebarComponent,
+    StudentProfileComponent,
   ],
   imports: [
     BrowserModule,
