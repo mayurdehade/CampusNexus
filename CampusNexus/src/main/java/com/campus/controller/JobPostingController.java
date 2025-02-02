@@ -47,4 +47,9 @@ public class JobPostingController {
     public ResponseEntity<List<JobPostingResponse>> getAllJobs() {
         return ResponseEntity.ok(jobPostingService.getAllJobs());
     }
+
+    @GetMapping("/find/{jobId}")
+    public ResponseEntity<JobPostingResponse> getJobById(@PathVariable Long jobId) {
+        return ResponseEntity.ok(jobPostingService.getJobById(jobId));
+    }
 }

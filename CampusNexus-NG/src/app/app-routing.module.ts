@@ -7,6 +7,9 @@ import { StudentDashboardComponent } from './layouts/student-layout/student-dash
 import { FacultyDashboardComponent } from './layouts/faculty-layout/faculty-dashboard/faculty-dashboard.component';
 import { UpdateStudentComponent } from './layouts/student-layout/update-student/update-student.component';
 import { StudentProfileComponent } from './layouts/student-layout/student-profile/student-profile.component';
+import { AllJobPostingComponent } from './layouts/student-layout/all-job-posting/all-job-posting.component';
+import { AppliedJobsComponent } from './layouts/student-layout/applied-jobs/applied-jobs.component';
+import { JobPreviewComponent } from './layouts/student-layout/job-preview/job-preview.component';
 
 const routes: Routes = [
   { path: '', component: MainLoginComponent },
@@ -14,6 +17,9 @@ const routes: Routes = [
   { path: 'faculty/dashboard', component: FacultyDashboardComponent },
   { path: 'student/edit-profile', component: UpdateStudentComponent },
   { path: 'student/view-profile', component: StudentProfileComponent },
+  { path: 'student/all-job-postings', component: AllJobPostingComponent },
+  { path: 'student/applied-jobs', component: AppliedJobsComponent },
+  { path: 'student/job-preview/:jobid', component: JobPreviewComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
 

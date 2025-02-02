@@ -1,0 +1,49 @@
+<div class="flex h-screen">
+    <!-- Sidebar -->
+    <app-student-sidebar></app-student-sidebar>
+
+    <!-- Main Content -->
+    <div class="p-6 ml-8 bg-white w-full">
+        <div class="text-3xl font-bold text-gray-900 text-center">
+            <h1>All Job Postings</h1>
+        </div>
+
+        <section class="main-content w-full overflow-auto p-6">
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="p-4 text-left text-sm font-medium">Job Title</th>
+                            <th class="p-4 text-left text-sm font-medium">Company</th>
+                            <th class="p-4 text-left text-sm font-medium">Location</th>
+                            <th class="p-4 text-left text-sm font-medium">CTC</th>
+                            <th class="p-4 text-left text-sm font-medium">Posted By</th>
+                            <th class="p-4 text-left text-sm font-medium">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let job of jobPostings" class="even:bg-blue-50">
+                            <td class="p-4 text-sm text-black">{{ job.job_title }}</td>
+                            <td class="p-4 text-sm text-black">{{ job.companyName }}</td>
+                            <td class="p-4 text-sm text-black">{{ job.job_location }}</td>
+                            <td class="p-4 text-sm text-black">{{ job.ctc }}</td>
+                            <td class="p-4 text-sm text-black">{{ job.postedByName }}</td>
+                            <td class="p-4">
+                                <button class="mr-4" title="View Details"
+                                    [routerLink]="['/student/job-preview/', job.id]">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="w-5 fill-blue-500 hover:fill-blue-700" viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0z" />
+                                        <circle cx="12" cy="12" r="6" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>

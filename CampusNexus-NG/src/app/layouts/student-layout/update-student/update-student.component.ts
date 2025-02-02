@@ -55,6 +55,9 @@ export class UpdateStudentComponent implements OnInit {
 
   ngOnInit() {
     const storedData = localStorage.getItem('student_Data');
+    if (!storedData) {
+      this.router.navigate(['/']);
+    }
     if (storedData) {
       this.studentId = JSON.parse(storedData).id;
     }
@@ -64,7 +67,6 @@ export class UpdateStudentComponent implements OnInit {
   getStudentData() {
     this.studentService.getProfile(this.studentId).subscribe({
       next: (response) => {
-        console.log('Success:', response);
         // Convert ISO date to YYYY-MM-DD format
         const isoDate = response.birthDate;
         const formattedDate = new Date(isoDate).toISOString().split('T')[0];
@@ -169,7 +171,6 @@ export class UpdateStudentComponent implements OnInit {
 
       this.studentService.updateProfile(formData, this.studentId).subscribe({
         next: (response) => {
-          console.log('Success:', response);
           this.updateLocalStorageUser();
           alert('Student details updated successfully!');
           this.router.navigate(['/student/dashboard']);

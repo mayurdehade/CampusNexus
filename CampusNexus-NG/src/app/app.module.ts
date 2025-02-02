@@ -26,6 +26,9 @@ import { PageNotFoundComponent } from './core/page-not-found/page-not-found.comp
 import { StudentSidebarComponent } from './layouts/student-layout/student-sidebar/student-sidebar.component';
 import { FacultySidebarComponent } from './layouts/faculty-layout/faculty-sidebar/faculty-sidebar.component';
 import { StudentProfileComponent } from './layouts/student-layout/student-profile/student-profile.component';
+import { AllJobPostingComponent } from './layouts/student-layout/all-job-posting/all-job-posting.component';
+import { AppliedJobsComponent } from './layouts/student-layout/applied-jobs/applied-jobs.component';
+import { JobPreviewComponent } from './layouts/student-layout/job-preview/job-preview.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +54,9 @@ import { StudentProfileComponent } from './layouts/student-layout/student-profil
     StudentSidebarComponent,
     FacultySidebarComponent,
     StudentProfileComponent,
+    AllJobPostingComponent,
+    AppliedJobsComponent,
+    JobPreviewComponent,
   ],
   imports: [
     BrowserModule,

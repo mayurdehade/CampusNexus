@@ -20,6 +20,9 @@ export class StudentProfileComponent {
 
   ngOnInit(): void {
     const storedData = localStorage.getItem('student_Data');
+    if (!storedData) {
+      this.router.navigate(['/']);
+    }
     if (storedData) {
       // this.studentData = JSON.parse(storedData);
       this.studentService.getProfile(JSON.parse(storedData).id).subscribe({
