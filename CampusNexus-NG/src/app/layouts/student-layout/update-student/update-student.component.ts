@@ -1,5 +1,6 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { StudentService } from 'src/app/core/services/student/student.service';
 
@@ -8,7 +9,7 @@ import { StudentService } from 'src/app/core/services/student/student.service';
   templateUrl: './update-student.component.html',
   styleUrls: ['./update-student.component.css'],
 })
-export class UpdateStudentComponent {
+export class UpdateStudentComponent implements OnInit {
   userForm: FormGroup;
   studImage: File | null = null;
   studResume: File | null = null;
@@ -27,14 +28,16 @@ export class UpdateStudentComponent {
   studentId: number = 0;
   imagePreview: string | ArrayBuffer | null = null;
   existingImage: string | null = null;
-  existingResume: string | null = null;
+  existingResume: string | SafeResourceUrl | null = null;
+  resumePreview: string | ArrayBuffer | null = null;
   isImgChanged = false;
   isResumeChanged = false;
 
   constructor(
     private fb: FormBuilder,
     private studentService: StudentService,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {
     this.userForm = this.fb.group({
       registerNo: ['', Validators.required],
@@ -43,76 +46,111 @@ export class UpdateStudentComponent {
       mobile: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       birthDate: ['', Validators.required],
       streams: ['', Validators.required],
-      resume: [null, Validators.required], // Updated to accept file as null
-      image: [null, Validators.required], // Updated to accept file as null
-      profileSummary: [],
+      resume: [null, Validators.required],
+      image: [null, Validators.required],
+      profileSummary: ['', Validators.required],
       skills: ['', Validators.required],
     });
   }
 
-  // Handles file selection
+  ngOnInit() {
+    const storedData = localStorage.getItem('student_Data');
+    if (storedData) {
+      this.studentId = JSON.parse(storedData).id;
+    }
+    this.getStudentData();
+  }
+
+  getStudentData() {
+    this.studentService.getProfile(this.studentId).subscribe({
+      next: (response) => {
+        console.log('Success:', response);
+        // Convert ISO date to YYYY-MM-DD format
+        const isoDate = response.birthDate;
+        const formattedDate = new Date(isoDate).toISOString().split('T')[0];
+
+        // Patch the form with the retrieved values
+        this.userForm.patchValue({
+          ...response,
+          birthDate: formattedDate,
+        });
+
+        // Set the existing image if available; otherwise, keep it null.
+        if (response.image) {
+          this.existingImage = `data:image/jpeg;base64,${response.image}`;
+        } else {
+          this.existingImage = null;
+        }
+
+        // Set the existing resume preview if available; otherwise, null.
+        if (response.resume) {
+          const base64Pdf = response.resume;
+          this.existingResume = this.sanitizer.bypassSecurityTrustResourceUrl(
+            `data:application/pdf;base64,${base64Pdf}`
+          );
+        } else {
+          this.existingResume = null;
+        }
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        alert('Student Not Found');
+      },
+    });
+  }
+
+  // File selection handler for both image and resume
   onFileSelect(event: Event, fileType: string) {
     const fileInput = event.target as HTMLInputElement;
 
     if (fileInput?.files?.length) {
       const file = fileInput.files[0];
 
-      // Perform validation
+      // Validate file type
       if (fileType === 'image' && !file.type.startsWith('image/')) {
         alert('Only image files are allowed.');
-        fileInput.value = ''; // Clear the input
+        fileInput.value = '';
         return;
       }
-
       if (fileType === 'resume' && file.type !== 'application/pdf') {
         alert('Only PDF files are allowed.');
-        fileInput.value = ''; // Clear the input
+        fileInput.value = '';
         return;
       }
 
-      // Update the corresponding form control with the file
+      // Update the form control with the file
       this.userForm.patchValue({ [fileType]: file });
-      this.userForm.get(fileType)?.updateValueAndValidity(); // Mark as dirty and validate
+      this.userForm.get(fileType)?.updateValueAndValidity();
 
-      // Optional: Provide UI feedback for upload success
       if (fileType === 'image') {
-        this.uploadedImage = true;
         this.isImgChanged = true;
+        this.studImage = file;
+        // Clear any previously loaded API image
         this.existingImage = null;
-        //this.profileImage!.nativeElement.innerText = file.name;
-        this.studImage = (fileInput.files as FileList)[0];
         const reader = new FileReader();
         reader.onload = () => {
           this.imagePreview = reader.result;
         };
-        // reader.readAsDataURL(this.studImage);
+        reader.readAsDataURL(file);
       } else if (fileType === 'resume') {
-        this.uploadedResume = true;
         this.isResumeChanged = true;
-        //this.studentResume!.nativeElement.innerText = file.name;
-        this.studResume = (fileInput.files as FileList)[0];
-      }
-
-      if (file) {
+        this.studResume = file;
+        // Use FileReader to read the PDF as Data URL for preview
         const reader = new FileReader();
-        // Based on the type, handle the file preview
         reader.onload = () => {
-          if (fileType === 'pdf') {
-            this.existingResume = reader.result as string; // Set PDF preview
-          } else if (fileType === 'image') {
-            this.existingImage = reader.result as string; // Set Image preview
-          }
+          // Pass the result through the sanitizer to create a safe URL
+          this.existingResume = this.sanitizer.bypassSecurityTrustResourceUrl(
+            reader.result as string
+          );
         };
         reader.readAsDataURL(file);
       }
     }
   }
 
-  // Form submission
   onSubmit() {
     if (this.userForm.valid) {
       const formData = new FormData();
-
       formData.append('registerNo', this.userForm.value.registerNo);
       formData.append('fullName', this.userForm.value.fullName);
       formData.append('email', this.userForm.value.email);
@@ -121,11 +159,14 @@ export class UpdateStudentComponent {
       formData.append('birthDate', this.userForm.value.birthDate);
       formData.append('profileSummary', this.userForm.value.profileSummary);
       formData.append('skills', this.userForm.value.skills);
+      // Append image/resume only if a new file is selected.
+      if (this.studImage) {
+        formData.append('image', this.studImage as Blob);
+      }
+      if (this.studResume) {
+        formData.append('resume', this.studResume as Blob);
+      }
 
-      formData.append('image', this.studImage as Blob);
-      formData.append('resume', this.studResume as Blob);
-
-      // Call the service method
       this.studentService.updateProfile(formData, this.studentId).subscribe({
         next: (response) => {
           console.log('Success:', response);
@@ -143,32 +184,6 @@ export class UpdateStudentComponent {
     }
   }
 
-  getStudentData() {
-    this.studentService.getProfile(this.studentId).subscribe({
-      next: (response) => {
-        console.log('Success:', response);
-        this.userForm.patchValue(response);
-        this.existingImage = `data:image/jpeg;base64,${this.userForm.value.image}`;
-        this.simulateApiCall().then((blob: Blob) => {
-          const url = URL.createObjectURL(blob);
-          this.existingResume = url; // Set the blob as the PDF source
-        });
-      },
-      error: (err) => {
-        console.error('Error:', err);
-        alert('Student Not Found');
-      },
-    });
-  }
-
-  simulateApiCall(): Promise<Blob> {
-    return new Promise((resolve) => {
-      // Simulate a PDF Blob
-      const blob = new Blob(['PDF content'], { type: 'application/pdf' });
-      setTimeout(() => resolve(blob), 1000);
-    });
-  }
-
   updateLocalStorageUser() {
     const studentData = localStorage.getItem('student_Data');
     let res_id = 0;
@@ -180,12 +195,10 @@ export class UpdateStudentComponent {
         if (response && response.imageBlob) {
           this.convertBlobToBase64(response.image).then(
             (base64Image: string) => {
-              // Save the Base64 image to local storage
               localStorage.setItem('student_Image', base64Image);
             }
           );
         }
-        // Store the rest of the student data in local storage
         localStorage.setItem('student_Data', JSON.stringify(response));
       },
       error: (error) => {
@@ -199,16 +212,7 @@ export class UpdateStudentComponent {
       const reader = new FileReader();
       reader.onloadend = () => resolve(reader.result as string);
       reader.onerror = reject;
-      reader.readAsDataURL(blob); // Convert blob to Base64
+      reader.readAsDataURL(blob);
     });
-  }
-
-  ngOnInit() {
-    const storedData = localStorage.getItem('student_Data');
-    if (storedData) {
-      this.studentId = JSON.parse(storedData).id;
-    }
-
-    this.getStudentData();
   }
 }

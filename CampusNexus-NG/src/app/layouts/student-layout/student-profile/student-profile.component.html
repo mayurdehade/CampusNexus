@@ -1,10 +1,44 @@
-<div class="flex h-screen">
-    <!-- Sidebar -->
-    <app-student-sidebar></app-student-sidebar>
-    <!-- Main Content -->
-    <div class="p-6 bg-white">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">Welcome to the Dashboard!</h1>
+<div class="container mx-auto p-6">
+    <a routerLink="/student/dashboard"
+        class="px-5 py-2.5 rounded-md text-sm tracking-wider font-medium border border-current outline-none bg-sky-700 hover:bg-transparent text-white hover:text-sky-700 transition-all duration-300">
+        Dashboard
+    </a>
+    <h2 class="text-3xl font-bold mb-6 text-center text-sky-700">Student Profile Preview</h2>
+
+    <ng-container *ngIf="studentData; else noData">
+        <div class="flex flex-col md:flex-row bg-white">
+            <div class="md:w-2/3 shadow rounded-lg overflow-hidden">
+                <!-- Profile Image Section -->
+                <div class="bg-gray-100 flex items-center justify-center p-4">
+                    <img *ngIf="studentData.image" [src]="'data:image/jpeg;base64,' + studentData.image"
+                        alt="Profile Image" class="rounded-full w-48 h-48 object-cover">
+                    <div *ngIf="!studentData.image" class="text-gray-500">No Image</div>
+                </div>
+                <!-- Profile Details Section -->
+                <div class="md:w-2/3 p-6">
+                    <p class="mb-2"><strong>Register Number:</strong> {{ studentData.registerNo}}</p>
+                    <p class="mb-2"><strong>Full Name:</strong> {{ studentData.fullName }}</p>
+                    <p class="mb-2"><strong>Email:</strong> {{ studentData.email }}</p>
+                    <p class="mb-2"><strong>Mobile:</strong> {{ studentData.mobile }}</p>
+                    <p class="mb-2"><strong>Birth Date:</strong> {{ studentData.birthDate ? (studentData.birthDate | date:'mediumDate') : 'N/A' }}</p>
+                    <p class="mb-2"><strong>Stream:</strong> {{ studentData.streams }}</p>
+                    <p class="mb-2"><strong>Skills:</strong> {{ studentData.skills ? studentData.skills : 'N/A' }}</p>
+                    <p class="mb-2"><strong>Profile Summary:</strong> {{ studentData.profileSummary ? studentData.profileSummary : 'N/A' }}</p>
+                </div>
+            </div>
+            <!-- Resume Preview -->
+            <div *ngIf="StudentResume" class="md:w-2/3">
+                <embed [src]="StudentResume" type="application/pdf" width="100%" height="600px" />
+            </div>
+            <div *ngIf="!StudentResume" class="md:w-2/3">
+                <div width="100%" height="600px">
+                    <p class="text-center text-gray-500">No resume available.</p>
+                </div>
+            </div>
         </div>
-    </div>
+    </ng-container>
+
+    <ng-template #noData>
+        <p class="text-center text-gray-500">No student data available.</p>
+    </ng-template>
 </div>

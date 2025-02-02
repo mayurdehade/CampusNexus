@@ -1,5 +1,4 @@
 <div class="p-5">
-
     <a routerLink="/student/dashboard"
         class="px-5 py-2.5 rounded-md text-sm tracking-wider font-medium border border-current outline-none bg-sky-700 hover:bg-transparent text-white hover:text-sky-700 transition-all duration-300">
         Dashboard
@@ -8,15 +7,14 @@
     <h1 class="text-3xl font-bold text-sky-700 text-center">Update Your Profile</h1>
 
     <form class="font-[sans-serif] m-10 max-w-4xl mx-auto" [formGroup]="userForm" (ngSubmit)="onSubmit()">
-
         <div class="grid sm:grid-cols-2 gap-10">
-
+            <!-- Register Number -->
             <div class="relative flex-row items-center">
                 <div>
                     <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Register
                         Number</label>
                     <input type="number" formControlName="registerNo"
-                        class="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-200 focus:border-blue-500 rounded outline-none"
+                        class="px-4 py-3.5 cursor-not-allowed bg-white text-black w-full text-sm border-2 border-gray-200 focus:border-blue-500 rounded outline-none"
                         readonly />
                 </div>
                 <div *ngIf="userForm.get('registerNo')?.invalid && userForm.get('registerNo')?.touched"
@@ -25,7 +23,7 @@
                 </div>
             </div>
 
-
+            <!-- Full Name -->
             <div class="relative flex-row items-center">
                 <div>
                     <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Full
@@ -39,7 +37,7 @@
                 </div>
             </div>
 
-
+            <!-- Email -->
             <div class="relative flex-row items-center">
                 <div>
                     <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Email</label>
@@ -52,7 +50,7 @@
                 </div>
             </div>
 
-
+            <!-- Mobile -->
             <div class="relative flex-row items-center">
                 <div>
                     <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Mobile
@@ -66,7 +64,7 @@
                 </div>
             </div>
 
-
+            <!-- Birth Date -->
             <div class="relative flex-row items-center">
                 <div>
                     <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Birth
@@ -80,7 +78,7 @@
                 </div>
             </div>
 
-
+            <!-- Branch -->
             <div class="relative flex-row items-center">
                 <div>
                     <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Branch</label>
@@ -97,7 +95,7 @@
                 </div>
             </div>
 
-
+            <!-- Skills -->
             <div class="relative flex-row items-center sm:col-span-2">
                 <div>
                     <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Skills</label>
@@ -110,19 +108,19 @@
                 </div>
             </div>
 
-
+            <!-- Profile Summary -->
             <div class="relative flex-row items-center sm:col-span-2">
                 <div>
                     <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Profile
                         Summary</label>
                     <textarea formControlName="profileSummary" placeholder="Enter profile summary"
                         class="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-200 focus:border-blue-500 rounded outline-none">
-                                </textarea>
+                    </textarea>
                 </div>
             </div>
 
             <!-- Image Upload -->
-            <div class="relative flex items-center  ">
+            <div class="relative flex items-center">
                 <label for="uploadImage"
                     class="flex flex-col align-middle text-gray-500 rounded bg-gray-100 w-full p-5 text-center border-gray-300 border-dashed border-2 justify-center items-center cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-11 h-28 mb-2 fill-gray-500" viewBox="0 0 32 32">
@@ -134,14 +132,13 @@
                         </path>
                     </svg>
                     <span *ngIf="!isImgChanged">Upload Profile Picture</span>
-                    <span *ngIf="isImgChanged" class="text-green-500 flex items-center" id="profileImage">
+                    <span *ngIf="isImgChanged" class="text-green-500 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24"
                             fill="currentColor">
                             <path d="M10 15.172l-3.414-3.415L5.172 13l4 4 8-8-1.414-1.414z"></path>
                         </svg>
                         File Uploaded Successfully!
                     </span>
-                    <span *ngIf="isImgChanged" #profileImage></span>
                     <input type="file" class="hidden" id="uploadImage" accept="image/*"
                         (change)="onFileSelect($event, 'image')" />
                     <p class="text-xs font-medium text-gray-400 mt-2">
@@ -155,26 +152,22 @@
                 </label>
             </div>
 
-            <div class="relative flex items-center  ">
-                <div for="uploadImage"
+            <!-- Profile Image Preview -->
+            <div *ngIf="imagePreview || existingImage" class="relative flex-row items-center">
+                <div
                     class="flex flex-col align-middle text-gray-500 rounded bg-gray-100 w-full p-5 text-center border-gray-300 border-dashed border-2 justify-center items-center cursor-pointer h-56">
-                    <div *ngIf="imagePreview" class="image-preview">
+                    <div *ngIf="imagePreview; else showExistingImage" class="image-preview">
                         <div class="circle-image">
-                            <img [src]="imagePreview" alt="imagePreview" class="preview-image" />
+                            <img [src]="imagePreview" alt="Uploaded Profile" class="preview-image w-56 h-56" />
                         </div>
                     </div>
-
-                    <div *ngIf="existingImage" class="image-preview">
-                        <div class="circle-image">
-                            <img [src]="existingImage" alt="existingImage" class="preview-image" class="h-52" />
+                    <ng-template #showExistingImage>
+                        <div *ngIf="existingImage" class="image-preview">
+                            <div class="circle-image">
+                                <img [src]="existingImage" alt="Existing Profile" class="preview-image w-56 h-56" />
+                            </div>
                         </div>
-                    </div>
-
-                    <div *ngIf="!existingImage && !imagePreview" class="image-preview">
-                        <div class="circle-image">
-                            <img [src]="existingImage" alt="existingImage" class="preview-image" class="h-52" />
-                        </div>
-                    </div>
+                    </ng-template>
                 </div>
             </div>
 
@@ -198,7 +191,6 @@
                         </svg>
                         File Uploaded Successfully!
                     </span>
-                    <span *ngIf="isResumeChanged" #studentResume></span>
                     <input type="file" class="hidden" id="uploadResume" accept="application/pdf"
                         (change)="onFileSelect($event, 'resume')" />
                     <p class="text-xs font-medium text-gray-400 mt-2">
@@ -211,16 +203,18 @@
                     </div>
                 </label>
             </div>
-            <div class="relative flex items-center sm:col-span-2">
-                <embed *ngIf="existingResume" [src]="existingResume" type="application/pdf"
-                    style="width: 100%; height: 500px;" />
-                <!-- <embed *ngIf="" [src]="studResume" type="application/pdf" style="width: 100%; height: 500px;" /> -->
+
+            <!-- Resume Preview -->
+            <div *ngIf="existingResume" class="relative flex items-center sm:col-span-2 mt-4">
+                <embed [src]="existingResume" type="application/pdf" style="width: 100%; height: 500px;" />
             </div>
         </div>
-        <button type="submit" [disabled]="userForm.invalid" [ngClass]="{
-                            'bg-gray-400 cursor-not-allowed': userForm.invalid,
-                            'bg-sky-700 hover:bg-sky-800 cursor-pointer': userForm.valid
-                        }" class="mt-8 px-6 py-2.5 w-full text-sm text-white rounded transition-all">Update</button>
 
+        <button type="submit" [disabled]="userForm.invalid" [ngClass]="{
+                'bg-gray-400 cursor-not-allowed': userForm.invalid,
+                'bg-sky-700 hover:bg-sky-800 cursor-pointer': userForm.valid
+              }" class="mt-8 px-6 py-2.5 w-full text-sm text-white rounded transition-all">
+            Update
+        </button>
     </form>
 </div>

@@ -35,7 +35,7 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getFullStudentById(id));
     }
 
-    @GetMapping("/student-data/{id}")
+    @GetMapping("/student/{id}")
     public ResponseEntity<StudentEditResponse> getStudentAllData(@PathVariable long id) {
         return ResponseEntity.ok(studentService.getFullStudentById(id));
     }

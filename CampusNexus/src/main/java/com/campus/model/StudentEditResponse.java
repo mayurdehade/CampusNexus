@@ -21,7 +21,7 @@ public class StudentEditResponse {
     private String fullName;
     private String email;
     private Long mobile;
-    private String birthDate;
+    private Date birthDate;
     private Streams streams;
     private byte[] resume;
     private byte[] image;

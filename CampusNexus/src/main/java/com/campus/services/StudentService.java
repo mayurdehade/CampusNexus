@@ -10,8 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 @Service
 public class StudentService {
@@ -53,6 +56,8 @@ public class StudentService {
         student.setMobile(req.getMobile());
         student.setPassword(req.getPassword());
         student.setStreams(req.getStreams());
+        student.setCreatedAt(new Date());
+        student.setUpdatedAt(new Date());
         student =  studentRepository.save(student);
         return ResponseEntity.ok(new UserMessageResponse("success", "Student registered successfully."));
     }
@@ -71,6 +76,7 @@ public class StudentService {
     public StudentResponse updateStudent(long id, StudentUpdateDto studentUpdateDto) {
         Optional<Student> dbStudent = studentRepository.findById(id);
         Student existingStudent = getStudent(id, studentUpdateDto, dbStudent);
+        existingStudent.setUpdatedAt(new Date());
         Student studentRes = studentRepository.save(existingStudent);
         return new StudentResponse(studentRes.getId(), studentRes.getRegisterNo(), studentRes.getFullName(), studentRes.getEmail(), studentRes.getMobile(), studentRes.getStreams(), studentRes.getResume(), studentRes.getImage());
     }
@@ -78,15 +84,23 @@ public class StudentService {
     //method for updating student
     private static Student getStudent(long id, StudentUpdateDto studentUpdateDto, Optional<Student> dbStudent) {
         Student existingStudent = dbStudent.orElseThrow(() -> new NotFoundException("Student not found with id " + id));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
             existingStudent.setFullName(studentUpdateDto.getFullName());
             existingStudent.setEmail(studentUpdateDto.getEmail());
             existingStudent.setMobile(studentUpdateDto.getMobile());
             existingStudent.setStreams(studentUpdateDto.getStreams());
-            existingStudent.setImage(studentUpdateDto.getImage().getBytes());
-            existingStudent.setResume(studentUpdateDto.getResume().getBytes());
             existingStudent.setProfileSummary(studentUpdateDto.getProfileSummary());
             existingStudent.setSkills(studentUpdateDto.getSkills());
+            existingStudent.setBirthDate(formatter.parse(studentUpdateDto.getBirthDate()));
+
+            if(studentUpdateDto.getImage() != null) {
+                existingStudent.setImage(studentUpdateDto.getImage().getBytes());
+            }
+            if(studentUpdateDto.getResume() != null) {
+                existingStudent.setResume(studentUpdateDto.getResume().getBytes());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

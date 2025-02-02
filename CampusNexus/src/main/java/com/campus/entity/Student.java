@@ -30,7 +30,7 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private Streams streams;
 
-    private String birthDate;
+    private Date birthDate;
 
     //resume
     @Lob
@@ -43,4 +43,7 @@ public class Student {
 
     private String profileSummary;
     private String skills;
+
+    private Date createdAt;
+    private Date updatedAt;
 }

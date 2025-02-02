@@ -25,4 +25,8 @@ export class StudentService {
   getStudentByRegisterNo(res_id: number): Observable<any> {
     return this.http.get<any>(this.baseUrl + `/find/${res_id}`);
   }
+
+  getStudentAllData(id: number): Observable<any> {
+    return this.http.get<any>(this.baseUrl + `/student-data/${id}`);
+  }
 }
