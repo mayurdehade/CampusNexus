@@ -40,15 +40,6 @@ export class StudentLoginComponent {
       this.authService.studentLogin(formData).subscribe({
         next: (response) => {
           this.loginError = false;
-          if (response && response.imageBlob) {
-            this.convertBlobToBase64(response.image).then(
-              (base64Image: string) => {
-                // Save the Base64 image to local storage
-                localStorage.setItem('student_Image', base64Image);
-              }
-            );
-          }
-
           // Store the rest of the student data in local storage
           localStorage.setItem('student_Data', JSON.stringify(response));
           this.router.navigate(['/student/dashboard']);
@@ -62,15 +53,6 @@ export class StudentLoginComponent {
     } else {
       console.log('Form is invalid');
     }
-  }
-
-  convertBlobToBase64(blob: Blob): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob); // Convert blob to Base64
-    });
   }
 
   ngOnInit(): void {

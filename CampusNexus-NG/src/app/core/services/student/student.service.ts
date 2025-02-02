@@ -21,4 +21,8 @@ export class StudentService {
   updateProfile(data: any, id: number): Observable<any> {
     return this.http.put<any>(this.baseUrl + `/update/${id}`, data);
   }
+
+  getStudentByRegisterNo(res_id: number): Observable<any> {
+    return this.http.get<any>(this.baseUrl + `/find/${res_id}`);
+  }
 }

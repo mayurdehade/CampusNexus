@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-student-sidebar',
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class StudentSidebarComponent {
   constructor(private router: Router) {}
 
-  studentImage: string = '';
+  studentImage: string | null = null;
   studentAltImage: string = '';
   studentData: any = {};
 
@@ -18,17 +18,25 @@ export class StudentSidebarComponent {
     this.router.navigate(['/']);
   }
 
-  ngOnInit(): void {
+  loadLocalStorageData() {
     const storedData = localStorage.getItem('student_Data');
-    const storedImage = localStorage.getItem('student_Image');
 
     if (storedData) {
       this.studentData = JSON.parse(storedData);
       this.studentAltImage = this.studentData.fullName.charAt(0).toUpperCase();
     }
 
-    if (storedImage) {
-      this.studentImage = storedImage;
+    if (this.studentData.image != null) {
+      this.studentImage = `data:image/jpeg;base64,${this.studentData.image}`;
     }
+  }
+  ngOnInit(): void {
+    this.loadLocalStorageData();
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.loadLocalStorageData(); // Re-load data when navigation occurs
+      }
+    });
   }
 }
