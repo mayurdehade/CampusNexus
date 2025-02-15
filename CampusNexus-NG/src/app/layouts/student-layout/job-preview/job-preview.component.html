@@ -6,7 +6,7 @@
     <div class="flex-1 px-8 py-4 bg-gray-50 overflow-y-auto">
         <div class="max-w-4xl mx-auto">
             <div>
-                <a routerLink="/student/all-job-postings"
+                <button (click)="goBack()"
                     class="inline-flex items-center text-sky-600 hover:text-sky-800 transition-colors">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -14,7 +14,7 @@
                         </path>
                     </svg>
                     Back
-                </a>
+                </button>
             </div>
             <!-- Header Section -->
             <div class="mb-8 text-center">

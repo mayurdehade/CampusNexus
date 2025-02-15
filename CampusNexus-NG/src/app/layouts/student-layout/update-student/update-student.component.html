@@ -1,220 +1,190 @@
-<div class="p-5">
-    <a routerLink="/student/dashboard"
-        class="px-5 py-2.5 rounded-md text-sm tracking-wider font-medium border border-current outline-none bg-sky-700 hover:bg-transparent text-white hover:text-sky-700 transition-all duration-300">
-        Dashboard
-    </a>
-
-    <h1 class="text-3xl font-bold text-sky-700 text-center">Update Your Profile</h1>
-
-    <form class="font-[sans-serif] m-10 max-w-4xl mx-auto" [formGroup]="userForm" (ngSubmit)="onSubmit()">
-        <div class="grid sm:grid-cols-2 gap-10">
-            <!-- Register Number -->
-            <div class="relative flex-row items-center">
-                <div>
-                    <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Register
-                        Number</label>
-                    <input type="number" formControlName="registerNo"
-                        class="px-4 py-3.5 cursor-not-allowed bg-white text-black w-full text-sm border-2 border-gray-200 focus:border-blue-500 rounded outline-none"
-                        readonly />
-                </div>
-                <div *ngIf="userForm.get('registerNo')?.invalid && userForm.get('registerNo')?.touched"
-                    class="text-red-600 text-sm pb-2">
-                    Register No is required.
-                </div>
-            </div>
-
-            <!-- Full Name -->
-            <div class="relative flex-row items-center">
-                <div>
-                    <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Full
-                        Name</label>
-                    <input type="text" formControlName="fullName" placeholder="Enter full name"
-                        class="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-200 focus:border-blue-500 rounded outline-none" />
-                </div>
-                <div *ngIf="userForm.get('fullName')?.invalid && userForm.get('fullName')?.touched"
-                    class="text-red-600 text-sm pb-2">
-                    Full Name is required.
-                </div>
-            </div>
-
-            <!-- Email -->
-            <div class="relative flex-row items-center">
-                <div>
-                    <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Email</label>
-                    <input type="email" formControlName="email" placeholder="Enter email"
-                        class="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-200 focus:border-blue-500 rounded outline-none" />
-                </div>
-                <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
-                    class="text-red-600 text-sm pb-2">
-                    Valid Email is required.
-                </div>
-            </div>
-
-            <!-- Mobile -->
-            <div class="relative flex-row items-center">
-                <div>
-                    <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Mobile
-                        No</label>
-                    <input type="number" formControlName="mobile" placeholder="Enter mobile no."
-                        class="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-200 focus:border-blue-500 rounded outline-none" />
-                </div>
-                <div *ngIf="userForm.get('mobile')?.invalid && userForm.get('mobile')?.touched"
-                    class="text-red-600 text-sm pb-2">
-                    Mobile number is required.
-                </div>
-            </div>
-
-            <!-- Birth Date -->
-            <div class="relative flex-row items-center">
-                <div>
-                    <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Birth
-                        Date</label>
-                    <input type="date" formControlName="birthDate"
-                        class="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-200 focus:border-blue-500 rounded outline-none" />
-                </div>
-                <div *ngIf="userForm.get('birthDate')?.invalid && userForm.get('birthDate')?.touched"
-                    class="text-red-600 text-sm pb-2">
-                    Birth Date is required.
-                </div>
-            </div>
-
-            <!-- Branch -->
-            <div class="relative flex-row items-center">
-                <div>
-                    <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Branch</label>
-                    <select formControlName="streams" placeholder="Select branch"
-                        class="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-200 focus:border-blue-500 rounded outline-none">
-                        <option value="" disabled>Select Stream</option>
-                        <option *ngFor="let stream of streamsList" [value]="stream">{{ stream.split('_').join(' ') }}
-                        </option>
-                    </select>
-                </div>
-                <div *ngIf="userForm.get('streams')?.invalid && userForm.get('streams')?.touched"
-                    class="text-red-600 text-sm pb-2">
-                    Stream is required.
-                </div>
-            </div>
-
-            <!-- Skills -->
-            <div class="relative flex-row items-center sm:col-span-2">
-                <div>
-                    <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Skills</label>
-                    <input type="text" formControlName="skills" placeholder="Enter skills (comma-separated)"
-                        class="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-200 focus:border-blue-500 rounded outline-none" />
-                </div>
-                <div *ngIf="userForm.get('skills')?.invalid && userForm.get('skills')?.touched"
-                    class="text-red-600 text-sm">
-                    Skills are required.
-                </div>
-            </div>
-
-            <!-- Profile Summary -->
-            <div class="relative flex-row items-center sm:col-span-2">
-                <div>
-                    <label class="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Profile
-                        Summary</label>
-                    <textarea formControlName="profileSummary" placeholder="Enter profile summary"
-                        class="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-200 focus:border-blue-500 rounded outline-none">
-                    </textarea>
-                </div>
-            </div>
-
-            <!-- Image Upload -->
-            <div class="relative flex items-center">
-                <label for="uploadImage"
-                    class="flex flex-col align-middle text-gray-500 rounded bg-gray-100 w-full p-5 text-center border-gray-300 border-dashed border-2 justify-center items-center cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-11 h-28 mb-2 fill-gray-500" viewBox="0 0 32 32">
-                        <path
-                            d="M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z">
-                        </path>
-                        <path
-                            d="M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z">
-                        </path>
-                    </svg>
-                    <span *ngIf="!isImgChanged">Upload Profile Picture</span>
-                    <span *ngIf="isImgChanged" class="text-green-500 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path d="M10 15.172l-3.414-3.415L5.172 13l4 4 8-8-1.414-1.414z"></path>
-                        </svg>
-                        File Uploaded Successfully!
-                    </span>
-                    <input type="file" class="hidden" id="uploadImage" accept="image/*"
-                        (change)="onFileSelect($event, 'image')" />
-                    <p class="text-xs font-medium text-gray-400 mt-2">
-                        PNG, JPG, JPEG are Allowed. <br />
-                        Max Size: 2MB
-                    </p>
-                    <div *ngIf="userForm.get('image')?.invalid && userForm.get('image')?.touched"
-                        class="text-red-600 text-sm">
-                        Profile image is required.
-                    </div>
-                </label>
-            </div>
-
-            <!-- Profile Image Preview -->
-            <div *ngIf="imagePreview || existingImage" class="relative flex-row items-center">
-                <div
-                    class="flex flex-col align-middle text-gray-500 rounded bg-gray-100 w-full p-5 text-center border-gray-300 border-dashed border-2 justify-center items-center cursor-pointer h-56">
-                    <div *ngIf="imagePreview; else showExistingImage" class="image-preview">
-                        <div class="circle-image">
-                            <img [src]="imagePreview" alt="Uploaded Profile" class="preview-image w-56 h-56" />
-                        </div>
-                    </div>
-                    <ng-template #showExistingImage>
-                        <div *ngIf="existingImage" class="image-preview">
-                            <div class="circle-image">
-                                <img [src]="existingImage" alt="Existing Profile" class="preview-image w-56 h-56" />
-                            </div>
-                        </div>
-                    </ng-template>
-                </div>
-            </div>
-
-            <!-- Resume Upload -->
-            <div class="relative flex items-center sm:col-span-2">
-                <label for="uploadResume"
-                    class="flex flex-col align-middle text-gray-500 rounded bg-gray-100 w-full p-5 text-center border-gray-300 border-dashed border-2 justify-center items-center cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-11 mb-2 fill-gray-500" viewBox="0 0 32 32">
-                        <path
-                            d="M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z">
-                        </path>
-                        <path
-                            d="M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z">
-                        </path>
-                    </svg>
-                    <span *ngIf="!isResumeChanged">Upload Resume (PDF)</span>
-                    <span *ngIf="isResumeChanged" class="text-green-500 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path d="M10 15.172l-3.414-3.415L5.172 13l4 4 8-8-1.414-1.414z"></path>
-                        </svg>
-                        File Uploaded Successfully!
-                    </span>
-                    <input type="file" class="hidden" id="uploadResume" accept="application/pdf"
-                        (change)="onFileSelect($event, 'resume')" />
-                    <p class="text-xs font-medium text-gray-400 mt-2">
-                        PDF, DOC is Allowed. <br />
-                        Max Size: 10MB
-                    </p>
-                    <div *ngIf="userForm.get('resume')?.invalid && userForm.get('resume')?.touched"
-                        class="text-red-600 text-sm">
-                        Resume is required.
-                    </div>
-                </label>
-            </div>
-
-            <!-- Resume Preview -->
-            <div *ngIf="existingResume" class="relative flex items-center sm:col-span-2 mt-4">
-                <embed [src]="existingResume" type="application/pdf" style="width: 100%; height: 500px;" />
-            </div>
+<div class="p-6 bg-gray-50 min-h-screen">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header Section -->
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <a routerLink="/student/dashboard"
+                class="inline-flex items-center px-4 py-2 bg-white border border-sky-600 text-sky-600 rounded-lg hover:bg-sky-50 transition-colors duration-200 font-medium">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Dashboard
+            </a>
+            <h1 class="text-3xl font-bold text-gray-800 text-center sm:text-left">Update Profile</h1>
         </div>
 
-        <button type="submit" [disabled]="userForm.invalid" [ngClass]="{
-                'bg-gray-400 cursor-not-allowed': userForm.invalid,
-                'bg-sky-700 hover:bg-sky-800 cursor-pointer': userForm.valid
-              }" class="mt-8 px-6 py-2.5 w-full text-sm text-white rounded transition-all">
-            Update
-        </button>
-    </form>
+        <!-- Main Form -->
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="bg-white rounded-xl shadow-sm p-6 sm:p-8">
+            <div class="grid sm:grid-cols-2 gap-6">
+                <!-- Left Column -->
+                <div class="space-y-6">
+                    <!-- Register Number -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Register Number</label>
+                        <input type="number" formControlName="registerNo" readonly
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed" />
+                    </div>
+
+                    <!-- Full Name -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" formControlName="fullName" placeholder="John Doe"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                        <div *ngIf="userForm.get('fullName')?.invalid && userForm.get('fullName')?.touched"
+                            class="mt-1 text-sm text-red-600">
+                            Full name is required
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" formControlName="email" placeholder="john@example.com"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                        <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+                            class="mt-1 text-sm text-red-600">
+                            Valid email is required
+                        </div>
+                    </div>
+
+                    <!-- Mobile -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+                        <input type="number" formControlName="mobile" placeholder="9876543210"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                        <div *ngIf="userForm.get('mobile')?.invalid && userForm.get('mobile')?.touched"
+                            class="mt-1 text-sm text-red-600">
+                            10-digit mobile number required
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="space-y-6">
+                    <!-- Birth Date -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                        <input type="date" formControlName="birthDate"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                        <div *ngIf="userForm.get('birthDate')?.invalid && userForm.get('birthDate')?.touched"
+                            class="mt-1 text-sm text-red-600">
+                            Birth date is required
+                        </div>
+                    </div>
+
+                    <!-- Stream -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Academic Stream</label>
+                        <select formControlName="streams"
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+                            <option value="" disabled>Select your stream</option>
+                            <option *ngFor="let stream of streamsList" [value]="stream">
+                                {{ stream.replace('_', ' ') | titlecase }}
+                            </option>
+                        </select>
+                        <div *ngIf="userForm.get('streams')?.invalid && userForm.get('streams')?.touched"
+                            class="mt-1 text-sm text-red-600">
+                            Stream selection is required
+                        </div>
+                    </div>
+
+                    <!-- Skills -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Technical Skills</label>
+                        <input type="text" formControlName="skills" placeholder="Java, Angular, Python..."
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                        <div class="mt-1 text-xs text-gray-500">Separate skills with commas</div>
+                        <div *ngIf="userForm.get('skills')?.invalid && userForm.get('skills')?.touched"
+                            class="mt-1 text-sm text-red-600">
+                            At least one skill required
+                        </div>
+                    </div>
+
+                    <!-- Profile Summary -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Profile Summary</label>
+                        <textarea formControlName="profileSummary" rows="4" placeholder="Describe yourself..."
+                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Upload Sections -->
+            <div class="grid sm:grid-cols-2 gap-6 mt-8">
+                <!-- Image Upload -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">
+                        <div class="mb-3">Profile Photo</div>
+                        <div
+                            class="relative group border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-sky-500 transition-colors cursor-pointer">
+                            <input type="file" id="uploadImage" accept="image/*" class="hidden"
+                                (change)="onFileSelect($event, 'image')" />
+                            <div class="flex flex-col items-center justify-center h-full">
+                                <svg class="w-12 h-12 text-gray-400 mb-3 group-hover:text-sky-500" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <div *ngIf="!isImgChanged" class="text-sm text-gray-600">
+                                    <p class="font-medium">Click to upload</p>
+                                    <p class="text-xs mt-1">PNG, JPG up to 2MB</p>
+                                </div>
+                                <div *ngIf="isImgChanged" class="text-sm text-green-600 font-medium">
+                                    <p>Photo uploaded successfully!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="imagePreview || existingImage" class="mt-4">
+                            <div class="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden mx-auto">
+                                <img [src]="imagePreview || existingImage" alt="Profile preview"
+                                    class="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Resume Upload -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 ">
+                        <div class="mb-3">Resume/CV</div>
+                        <div
+                            class="relative group border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-sky-500 transition-colors cursor-pointer">
+                            <input type="file" id="uploadResume" accept="application/pdf" class="hidden"
+                                (change)="onFileSelect($event, 'resume')" />
+                            <div class="flex flex-col items-center justify-center h-full">
+                                <svg class="w-12 h-12 text-gray-400 mb-3 group-hover:text-sky-500" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <div *ngIf="!isResumeChanged" class="text-sm text-gray-600">
+                                    <p class="font-medium">Click to upload</p>
+                                    <p class="text-xs mt-1">PDF up to 10MB</p>
+                                </div>
+                                <div *ngIf="isResumeChanged" class="text-sm text-green-600 font-medium">
+                                    <p>Resume uploaded successfully!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+                    <div *ngIf="existingResume" class="mt-4">
+                        <embed [src]="existingResume" type="application/pdf" class="w-full h-64 border rounded-lg" />
+                    </div>
+                </div>
+
+            </div>
+            <!-- Submit Button -->
+            <button type="submit" [disabled]="userForm.invalid" class="mt-8 w-full px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-lg transition-colors
+                           disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center">
+                <svg *ngIf="loading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                    </path>
+                </svg>
+                {{ loading ? 'Updating...' : 'Update Profile' }}
+            </button>
+        </form>
+    </div>
 </div>

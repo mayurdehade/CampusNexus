@@ -31,6 +31,10 @@ export class JobPreviewComponent {
       });
   }
 
+  goBack(): void {
+    window.history.back();
+  }
+
   ngOnInit(): void {
     const storedData = localStorage.getItem('student_Data');
     if (!storedData) {

@@ -31,5 +31,5 @@ public class JobApplicationResponse {
     private String company_url;
     private String ctc;
     private boolean isActive;
-    private String postedBy;
+    private User postedBy;
 }

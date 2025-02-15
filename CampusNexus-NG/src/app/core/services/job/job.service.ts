@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class JobService {
   private baseUrl = 'http://localhost:8080/api/job-postings';
+  private jobApplyBaseUrl = 'http://localhost:8080/api/job-applications/';
   constructor(private http: HttpClient) {}
 
   getAllJobs(): Observable<any> {
@@ -21,13 +22,19 @@ export class JobService {
     return this.http.get(this.baseUrl + '/active/');
   }
 
+  // Job Appliation Services
+
   applyForJob(
     studentRegisterNo: number,
     jobPostingId: number
   ): Observable<any> {
     return this.http.post(
-      `http://localhost:8080/api/job-applications/apply/${studentRegisterNo}/${jobPostingId}`,
+      this.jobApplyBaseUrl + `apply/${studentRegisterNo}/${jobPostingId}`,
       null
     );
+  }
+
+  getAppliedJobsByStudent(studentRegisterNo: number): Observable<any> {
+    return this.http.get(this.jobApplyBaseUrl + `student/${studentRegisterNo}`);
   }
 }

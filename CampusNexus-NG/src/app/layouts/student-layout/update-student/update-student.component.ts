@@ -32,6 +32,7 @@ export class UpdateStudentComponent implements OnInit {
   resumePreview: string | ArrayBuffer | null = null;
   isImgChanged = false;
   isResumeChanged = false;
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -152,6 +153,7 @@ export class UpdateStudentComponent implements OnInit {
 
   onSubmit() {
     if (this.userForm.valid) {
+      this.loading = true;
       const formData = new FormData();
       formData.append('registerNo', this.userForm.value.registerNo);
       formData.append('fullName', this.userForm.value.fullName);
@@ -171,17 +173,19 @@ export class UpdateStudentComponent implements OnInit {
 
       this.studentService.updateProfile(formData, this.studentId).subscribe({
         next: (response) => {
+          this.loading = false;
           this.updateLocalStorageUser();
-          alert('Student details updated successfully!');
+          alert('Profile updated successfully!');
           this.router.navigate(['/student/dashboard']);
         },
         error: (err) => {
+          this.loading = false;
           console.error('Error:', err);
-          alert('Failed to update student details.');
+          alert('Update failed. Please try again.');
         },
       });
     } else {
-      alert('Please fill out all required fields correctly!');
+      this.userForm.markAllAsTouched();
     }
   }
 

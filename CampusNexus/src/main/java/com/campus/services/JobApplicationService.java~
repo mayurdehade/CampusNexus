@@ -194,7 +194,7 @@ public class JobApplicationService {
             response.setCompany_url(job.getCompany_url());
             response.setCtc(job.getCtc());
             response.setActive(job.isActive());
-            response.setPostedBy(job.getPostedBy().getName());
+            response.setPostedBy(job.getPostedBy());
         }
         return response;
     }

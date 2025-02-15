@@ -20,6 +20,15 @@ export class StudentProfileComponent {
     private sanitizer: DomSanitizer
   ) {}
 
+  downloadResume(): void {
+    if (!this.studentData.resume) return;
+
+    const link = document.createElement('a');
+    link.href = `data:application/pdf;base64,${this.studentData.resume}`;
+    link.download = `${this.studentData.fullName.replace(' ', '_')}_Resume.pdf`;
+    link.click();
+  }
+
   ngOnInit(): void {
     const storedData = localStorage.getItem('student_Data');
     if (!storedData) {
