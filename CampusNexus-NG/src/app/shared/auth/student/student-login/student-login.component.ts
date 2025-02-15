@@ -57,8 +57,14 @@ export class StudentLoginComponent {
 
   ngOnInit(): void {
     const studentData = localStorage.getItem('student_Data');
+    const userData = localStorage.getItem('user_Data');
+
     if (studentData != null) {
       this.router.navigate(['/student/dashboard']);
+    }
+
+    if(userData != null) {
+      this.router.navigate(['/faculty/dashboard']);
     }
   }
 }
