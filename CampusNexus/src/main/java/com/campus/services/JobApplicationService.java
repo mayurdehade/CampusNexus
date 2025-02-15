@@ -1,6 +1,7 @@
 package com.campus.services;
 
 import com.campus.entity.JobApplication;
+import com.campus.entity.JobPosting;
 import com.campus.entity.Student;
 import com.campus.enums.ApplicationStatus;
 import com.campus.model.JobApplicationResponse;
@@ -38,7 +39,7 @@ public class JobApplicationService {
     public JobApplication applyForJob(Long studentRegisterNo, Long jobPostingId) {
         // Check if the student has already applied for the job
         if (jobApplicationRepository.existsByStudentRegisterNoAndJobPostingId(studentRegisterNo, jobPostingId)) {
-            throw new IllegalArgumentException("Student has already applied for this job.");
+            throw new IllegalArgumentException("You have already applied for this job.");
         }
         JobApplication application = new JobApplication();
         application.setStudentRegisterNo(studentRegisterNo);
@@ -181,6 +182,20 @@ public class JobApplicationService {
         response.setStatus(application.getStatus());
         response.setAppliedAt(application.getAppliedAt());
         response.setUpdatedAt(application.getUpdatedAt());
+
+        // Fetch job details based on jobPostingId
+        JobPosting job = jobPostingRepository.findById(application.getJobPostingId()).orElse(null);
+        if (job != null) {
+            response.setJob_title(job.getJob_title());
+            response.setCompanyName(job.getCompanyName());
+            response.setJob_description(job.getJob_description());
+            response.setJob_location(job.getJob_location());
+            response.setEligibilityCriteria(job.getEligibilityCriteria());
+            response.setCompany_url(job.getCompany_url());
+            response.setCtc(job.getCtc());
+            response.setActive(job.isActive());
+            response.setPostedBy(job.getPostedBy().getName());
+        }
         return response;
     }
 }

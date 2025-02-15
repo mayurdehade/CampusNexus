@@ -3,6 +3,7 @@ package com.campus.controller;
 import com.campus.entity.JobApplication;
 import com.campus.enums.ApplicationStatus;
 import com.campus.model.JobApplicationResponse;
+import com.campus.model.JobApplyResponse;
 import com.campus.services.JobApplicationService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,24 @@ public class JobApplicationController {
     private JobApplicationService jobApplicationService;
 
     // Endpoint for a student to apply for a job
-    @PostMapping("/apply")
-    public ResponseEntity<JobApplication> applyForJob(@RequestParam Long studentRegisterNo, @RequestParam Long jobPostingId) {
+    @PostMapping("/apply/{studentRegisterNo}/{jobPostingId}")
+    public ResponseEntity<JobApplyResponse> applyForJob(@PathVariable Long studentRegisterNo, @PathVariable Long jobPostingId) {
         try {
             JobApplication application = jobApplicationService.applyForJob(studentRegisterNo, jobPostingId);
-            return ResponseEntity.ok(application);
+            JobApplyResponse response = new JobApplyResponse();
+            response.setSuccess(true);
+            response.setId(application.getId());
+            response.setStudentRegisterNo(application.getStudentRegisterNo());
+            response.setJobPostingId(application.getJobPostingId());
+            response.setStatus(application.getStatus());
+            response.setAppliedAt(application.getAppliedAt());
+            response.setUpdatedAt(application.getUpdatedAt());
+            return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null); // Return error message if needed
+            JobApplyResponse response = new JobApplyResponse();
+            response.setSuccess(false);
+            response.setReasonForRejection(e.getMessage());
+            return ResponseEntity.ok(response);
         }
     }
 

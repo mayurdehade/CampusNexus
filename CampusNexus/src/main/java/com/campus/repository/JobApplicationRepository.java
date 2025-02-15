@@ -1,6 +1,7 @@
 package com.campus.repository;
 
 import com.campus.entity.JobApplication;
+import com.campus.enums.ApplicationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -17,4 +18,5 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
 
     // Fetch all applications for a specific job and specific status (optional if needed)
     List<JobApplication> findByJobPostingIdAndStatus(Long jobPostingId, String status);
+    
 }

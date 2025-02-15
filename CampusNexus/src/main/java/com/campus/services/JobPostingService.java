@@ -86,4 +86,10 @@ public class JobPostingService {
         List<JobPosting> jobs = jobPostingRepository.findAll();
         return jobs.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
+
+    public JobPostingResponse getJobById(Long jobId) {
+        JobPosting job = jobPostingRepository.findById(jobId)
+                .orElseThrow(() -> new IllegalArgumentException("Job not found"));
+        return mapToResponse(job);
+    }
 }
