@@ -8,7 +8,25 @@
             <h1>All Job Postings</h1>
         </div>
 
+
         <section class="main-content w-full overflow-auto p-6">
+            <div class="mb-4">
+                <div class="mb-4 flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="Search by title, company, or location" [(ngModel)]="searchTerm"
+                            (input)="applySearch()"
+                            class="p-2 pl-3 pr-8 border-b-2 border-gray-300 focus:border-b-2 focus:border-blue-500 w-64 transition-all">
+                        <!-- Clear button -->
+                        <button *ngIf="searchTerm" (click)="clearSearch()"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            ×
+                        </button>
+                    </div>
+                    <label for="activeJobs" class="ml-4">Show Only Active Jobs </label>
+                    <input type="checkbox" id="terms" [(ngModel)]="isChecked" (change)="onCheckboxChange()"
+                        class="ml-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded cursor-pointer">
+                </div>
+            </div>
             <div class="overflow-x-auto">
                 <table class="min-w-full bg-white border border-gray-300">
                     <thead class="bg-gray-800 text-white">
@@ -18,27 +36,33 @@
                             <th class="p-4 text-left text-sm font-medium">Location</th>
                             <th class="p-4 text-left text-sm font-medium">CTC</th>
                             <th class="p-4 text-left text-sm font-medium">Posted By</th>
-                            <th class="p-4 text-left text-sm font-medium">Actions</th>
+                            <th class="p-4 text-center text-sm font-medium">Active</th>
+                            <th class="p-4 text-center text-sm font-medium">Actions</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <tr *ngFor="let job of jobPostings" class="even:bg-blue-50">
+                        <tr *ngFor="let job of filteredJobPostings" class="even:bg-blue-50">
                             <td class="p-4 text-sm text-black">{{ job.job_title }}</td>
                             <td class="p-4 text-sm text-black">{{ job.companyName }}</td>
                             <td class="p-4 text-sm text-black">{{ job.job_location }}</td>
                             <td class="p-4 text-sm text-black">{{ job.ctc }}</td>
                             <td class="p-4 text-sm text-black">{{ job.postedByName }}</td>
-                            <td class="p-4">
-                                <button class="mr-4" title="View Details"
-                                    [routerLink]="['/student/job-preview/', job.id]">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="w-5 fill-blue-500 hover:fill-blue-700" viewBox="0 0 24 24">
-                                        <path
-                                            d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0z" />
-                                        <circle cx="12" cy="12" r="6" />
-                                    </svg>
-                                </button>
+                            <td class="py-4 px-2 text-sm text-black text-center">
+                                <span class="inline-block h-4 w-4"
+                                    [innerHTML]="job.active ? activeIcon : inactiveIcon"></span>
+                            </td>
+                            <td class="p-4 text-center">
+                                <div class="flex items-center">
+                                    <button class="ml-4" title="View Details" [routerLink]="['/student/job-preview/', job.id]">
+                                        <!-- Your existing SVG icon -->
+                                        <svg width="24" height="24" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M 200 688C 200 688 800 688 800 688C 823 687 844 699 855 718C 866 738 866 762 855 782C 844 801 823 813 800 812C 800 812 200 812 200 812C 177 813 156 801 145 782C 134 762 134 738 145 718C 156 699 177 687 200 688C 200 688 200 688 200 688M 200 437C 200 437 800 437 800 437C 823 437 844 449 855 468C 866 488 866 512 855 532C 844 551 823 563 800 563C 800 563 200 563 200 563C 177 563 156 551 145 532C 134 512 134 488 145 468C 156 449 177 437 200 437C 200 437 200 437 200 437M 200 188C 200 188 800 188 800 188C 823 187 844 199 855 218C 866 238 866 262 855 282C 844 301 823 313 800 312C 800 312 200 312 200 312C 177 313 156 301 145 282C 134 262 134 238 145 218C 156 199 177 187 200 188C 200 188 200 188 200 188" />
+                                        </svg>
+                                    </button>
+                                
+                                </div>  
                             </td>
                         </tr>
                     </tbody>

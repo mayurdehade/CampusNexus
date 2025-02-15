@@ -1,5 +1,6 @@
 package com.campus.controller;
 
+import com.campus.model.JobApplicationResponse;
 import com.campus.model.JobPostingRequest;
 import com.campus.model.JobPostingResponse;
 import com.campus.services.JobPostingService;
@@ -52,4 +53,5 @@ public class JobPostingController {
     public ResponseEntity<JobPostingResponse> getJobById(@PathVariable Long jobId) {
         return ResponseEntity.ok(jobPostingService.getJobById(jobId));
     }
+
 }

@@ -16,4 +16,8 @@ export class JobService {
   getJobInfo(id: any): Observable<any> {
     return this.http.get(this.baseUrl + '/find/' + id);
   }
+
+  getActiveJobs(): Observable<any> {
+    return this.http.get(this.baseUrl + '/active/');
+  }
 }
