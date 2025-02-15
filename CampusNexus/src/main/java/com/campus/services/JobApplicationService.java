@@ -38,7 +38,7 @@ public class JobApplicationService {
     public JobApplication applyForJob(Long studentRegisterNo, Long jobPostingId) {
         // Check if the student has already applied for the job
         if (jobApplicationRepository.existsByStudentRegisterNoAndJobPostingId(studentRegisterNo, jobPostingId)) {
-            throw new IllegalArgumentException("Student has already applied for this job.");
+            throw new IllegalArgumentException("You have already applied for this job.");
         }
         JobApplication application = new JobApplication();
         application.setStudentRegisterNo(studentRegisterNo);

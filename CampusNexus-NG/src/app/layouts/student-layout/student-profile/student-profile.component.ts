@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { StudentService } from 'src/app/core/services/student/student.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-student-profile',
   templateUrl: './student-profile.component.html',
   styleUrls: ['./student-profile.component.css'],
+  providers: [DatePipe],
 })
 export class StudentProfileComponent {
   studentData: any;

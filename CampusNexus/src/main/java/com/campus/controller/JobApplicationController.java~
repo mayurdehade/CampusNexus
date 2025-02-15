@@ -39,7 +39,7 @@ public class JobApplicationController {
             JobApplyResponse response = new JobApplyResponse();
             response.setSuccess(false);
             response.setReasonForRejection(e.getMessage());
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok().body(response);
         }
     }
 
