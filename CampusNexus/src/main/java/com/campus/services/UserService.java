@@ -83,7 +83,6 @@ public class UserService {
             User user = optionalUser.get();
             user.setName(updatedUser.getName());
             user.setEmail(updatedUser.getEmail());
-            user.setPassword(updatedUser.getPassword());
             User userRes = userRepository.save(user);
             return new UserResponse(userRes.getId(), userRes.getName(), userRes.getEmail(), userRes.getRole(), userRes.isVarified());
         }

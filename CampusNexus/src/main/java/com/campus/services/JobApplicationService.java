@@ -5,6 +5,7 @@ import com.campus.entity.JobPosting;
 import com.campus.entity.Student;
 import com.campus.enums.ApplicationStatus;
 import com.campus.model.JobApplicationResponse;
+import com.campus.model.StudentEditResponse;
 import com.campus.repository.JobApplicationRepository;
 import com.campus.repository.JobPostingRepository;
 import com.campus.repository.StudentRepository;
@@ -196,6 +197,35 @@ public class JobApplicationService {
             response.setActive(job.isActive());
             response.setPostedBy(job.getPostedBy().getName());
         }
+
+        if(application.getStudentRegisterNo() != null) {
+            // Fetch student details based on studentRegisterNo
+            Student student = studentRepository.findByRegisterNo(application.getStudentRegisterNo()).orElse(null);
+            StudentEditResponse studentEditResponse = new StudentEditResponse();
+            if (student != null) {
+                studentEditResponse.setId(student.getId());
+                studentEditResponse.setRegisterNo(student.getRegisterNo());
+                studentEditResponse.setFullName(student.getFullName());
+                studentEditResponse.setEmail(student.getEmail());
+                studentEditResponse.setMobile(student.getMobile());
+                studentEditResponse.setStreams(student.getStreams());
+                studentEditResponse.setBirthDate(student.getBirthDate());
+                studentEditResponse.setResume(student.getResume());
+                studentEditResponse.setImage(student.getImage());
+                studentEditResponse.setProfileSummary(student.getProfileSummary());
+                studentEditResponse.setSkills(student.getSkills());
+                response.setStudent(studentEditResponse);
+            }
+        }
         return response;
+    }
+
+    public List<JobApplicationResponse> getAllApplications() {
+        List<JobApplication> applications = jobApplicationRepository.findAll();
+        return applications.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
+    public void deleteApplication(Long id) {
+        jobApplicationRepository.deleteById(id);
     }
 }

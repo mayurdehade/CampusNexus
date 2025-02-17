@@ -22,6 +22,14 @@ export class JobService {
     return this.http.get(this.baseUrl + '/active/');
   }
 
+  updateJob(userId: number, jobId: number, jobData: any): Observable<any> {
+    return this.http.put(this.baseUrl + `/update/${userId}/${jobId}`, jobData);
+  }
+
+  createJobPosting(jobData: any, userId: number): Observable<any> {
+    return this.http.post(this.baseUrl + `/create/${userId}`, jobData);
+  }
+
   // Job Appliation Services
 
   applyForJob(

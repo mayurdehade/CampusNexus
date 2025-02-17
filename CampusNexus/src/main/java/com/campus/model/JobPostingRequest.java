@@ -34,4 +34,6 @@ public class JobPostingRequest {
 
     private String ctc;
 
+    private boolean active;
+
 }

@@ -92,4 +92,23 @@ public class JobPostingService {
                 .orElseThrow(() -> new IllegalArgumentException("Job not found"));
         return mapToResponse(job);
     }
+
+    public JobPostingResponse updateJob(Long jobId, Long userId, JobPostingRequest request) {
+        JobPosting job = jobPostingRepository.findById(jobId)
+                .orElseThrow(() -> new IllegalArgumentException("Job not found"));
+
+        job.setJob_title(request.getJob_title());
+        job.setJob_description(request.getJob_description());
+        job.setCompanyName(request.getCompanyName());
+        job.setStartDate(request.getStartDate());
+        job.setEndDate(request.getEndDate());
+        job.setJob_location(request.getJob_location());
+        job.setEligibilityCriteria(request.getEligibilityCriteria());
+        job.setCompany_url(request.getCompany_url());
+        job.setCtc(request.getCtc());
+        job.setActive(request.isActive());
+        job.setPostedBy(userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found")));
+        JobPosting updatedJob = jobPostingRepository.save(job);
+        return mapToResponse(updatedJob);
+    }
 }

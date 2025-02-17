@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-login',
@@ -12,6 +13,8 @@ export class MainLoginComponent {
   createAcct = false;
   studentRegister = false;
   facutlyRegister = false;
+
+  constructor(private router: Router) {}
 
   sLogin() {
     this.studentLogin = true;
@@ -51,5 +54,16 @@ export class MainLoginComponent {
     this.facutlyRegister = false;
     this.studentLogin = true;
     this.facultyLogin = false;
+  }
+
+  ngOnInit() {
+    const studentData = localStorage.getItem('student_Data');
+    const userData = localStorage.getItem('user_Data');
+
+    if (studentData != null) {
+      this.router.navigate(['/student/dashboard']);
+    } else if (userData != null) {
+      this.router.navigate(['/faculty/dashboard']);
+    }
   }
 }

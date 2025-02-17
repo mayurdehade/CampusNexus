@@ -90,8 +90,8 @@
             </a>
         </li>
         <li>
-            <a (click)="logout()"
-                class="text-gray-300 hover:text-white text-sm flex items-center hover:bg-[#36336b] rounded px-4 py-3 transition-all">
+            <button (click)="logout()"
+                class="text-gray-300 hover:text-white text-sm flex items-center hover:bg-[#36336b] rounded px-4 py-3 w-full transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"
                     class="w-[25px] h-[25px] mr-2.5">
                     <path
@@ -100,7 +100,7 @@
                         stroke-width="32" />
                 </svg>
                 <span>Logout</span>
-            </a>
+            </button>
         </li>
     </ul>
 </nav>

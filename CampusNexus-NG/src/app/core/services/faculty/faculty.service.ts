@@ -19,14 +19,14 @@ export class FacultyService {
   }
 
   varifyCoordinator(id: number): Observable<any> {
-    return this.http.get(this.baseUrl + '/verify-coordinator/' + id);
+    return this.http.put(this.baseUrl + '/verify-coordinator/' + id, null);
   }
 
   updateUser(
-    credentials: { name: string; email: string; password: string },
+    credentials: { name: string; email: string },
     id: number
   ): Observable<any> {
-    return this.http.post(this.baseUrl + '/update/' + id, credentials);
+    return this.http.put(this.baseUrl + '/update/' + id, credentials);
   }
 
   deleteCoordinator(id: number): Observable<any> {
