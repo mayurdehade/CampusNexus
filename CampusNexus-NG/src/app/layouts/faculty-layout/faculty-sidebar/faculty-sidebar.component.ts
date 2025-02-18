@@ -22,8 +22,6 @@ export class FacultySidebarComponent {
     if (storedData) {
       this.userData = JSON.parse(storedData);
       this.imagePreview = this.userData.name.charAt(0).toUpperCase();
-    } else {
-      this.router.navigate(['/']);
     }
   }
   ngOnInit(): void {

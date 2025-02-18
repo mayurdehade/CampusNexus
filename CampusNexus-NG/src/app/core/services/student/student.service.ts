@@ -29,4 +29,12 @@ export class StudentService {
   getStudentAllData(id: number): Observable<any> {
     return this.http.get<any>(this.baseUrl + `/student-data/${id}`);
   }
+
+  getAllStudent(): Observable<any> {
+    return this.http.get<any>(this.baseUrl + `/all/`);
+  }
+
+  deleteStudent(id: number): Observable<any> {
+    return this.http.delete<any>(this.baseUrl + `/delete/${id}`);
+  }
 }

@@ -90,10 +90,10 @@ export class StudentDashboardComponent {
       this.studentImage = storedImage;
     }
 
-    //if student data not is local storage then don't allow to access dashboard
-    if (!storedData) {
-      this.router.navigate(['/']);
-    }
+    // if student data not is local storage then don't allow to access dashboard
+    // if (!storedData) {
+    //   this.router.navigate(['/']);
+    // }
     this.loadDashboardData();
   }
 }

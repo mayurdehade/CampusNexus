@@ -9,16 +9,15 @@ import { Router } from '@angular/router';
 export class FacultyDashboardComponent {
   constructor(private router: Router) {}
 
-  studentData: Object = {};
+  userData: Object = {};
 
   ngOnInit(): void {
     const storedData = localStorage.getItem('user_Data');
 
     if (storedData) {
-      this.studentData = JSON.parse(storedData);
+      this.userData = JSON.parse(storedData);
     }
 
-    //if student data not is local storage then don't allow to access dashboard
     if (!storedData) {
       this.router.navigate(['/']);
     }

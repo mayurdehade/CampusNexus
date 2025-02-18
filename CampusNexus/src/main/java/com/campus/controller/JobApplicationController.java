@@ -65,9 +65,9 @@ public class JobApplicationController {
     }
 
     // Endpoint to update job application status
-    @PutMapping("/{applicationId}/status")
-    public ResponseEntity<JobApplicationResponse> updateApplicationStatus(@PathVariable Long applicationId, @RequestParam ApplicationStatus status) throws NotFoundException {
-        JobApplicationResponse updatedApplication = jobApplicationService.updateApplicationStatus(applicationId, status);
+    @PutMapping("/{applicationId}/status/{applicationStatus}")
+    public ResponseEntity<JobApplicationResponse> updateApplicationStatus(@PathVariable Long applicationId, @PathVariable ApplicationStatus applicationStatus) throws NotFoundException {
+        JobApplicationResponse updatedApplication = jobApplicationService.updateApplicationStatus(applicationId, applicationStatus);
         return ResponseEntity.ok(updatedApplication);
     }
 
@@ -88,5 +88,17 @@ public class JobApplicationController {
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<JobApplicationResponse>> getAllApplications() {
+        List<JobApplicationResponse> applications = jobApplicationService.getAllApplications();
+        return ResponseEntity.ok(applications);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteApplication(@PathVariable Long id) {
+        jobApplicationService.deleteApplication(id);
+        return ResponseEntity.noContent().build();
     }
 }

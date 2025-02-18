@@ -32,4 +32,5 @@ public class JobApplicationResponse {
     private String ctc;
     private boolean isActive;
     private String postedBy;
+    private StudentEditResponse student;
 }

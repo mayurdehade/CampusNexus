@@ -30,6 +30,7 @@ import { JobPreviewComponent } from './layouts/student-layout/job-preview/job-pr
 import { StudentPreviewComponent } from './layouts/faculty-layout/student-preview/student-preview.component';
 import { AddJobPostingComponent } from './layouts/faculty-layout/add-job-posting/add-job-posting.component';
 import { FacultyJobPreviewComponent } from './layouts/faculty-layout/faculty-job-preview/faculty-job-preview.component';
+import { UpdateJobPostingComponent } from './layouts/faculty-layout/update-job-posting/update-job-posting.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { FacultyJobPreviewComponent } from './layouts/faculty-layout/faculty-job
     StudentPreviewComponent,
     AddJobPostingComponent,
     FacultyJobPreviewComponent,
+    UpdateJobPostingComponent,
   ],
   imports: [
     BrowserModule,

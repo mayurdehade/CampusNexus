@@ -17,6 +17,7 @@ import { ManageJobPostingsComponent } from './layouts/faculty-layout/manage-job-
 import { AddJobPostingComponent } from './layouts/faculty-layout/add-job-posting/add-job-posting.component';
 import { StudentPreviewComponent } from './layouts/faculty-layout/student-preview/student-preview.component';
 import { FacultyJobPreviewComponent } from './layouts/faculty-layout/faculty-job-preview/faculty-job-preview.component';
+import { UpdateJobPostingComponent } from './layouts/faculty-layout/update-job-posting/update-job-posting.component';
 
 const routes: Routes = [
   { path: '', component: MainLoginComponent },
@@ -37,6 +38,7 @@ const routes: Routes = [
   { path: 'faculty/add-job-posting', component: AddJobPostingComponent },
   { path: 'faculty/student-preview/:studentid', component: StudentPreviewComponent },
   { path: 'faculty/job-preview/:jobid', component: FacultyJobPreviewComponent },
+  { path: 'faculty/update-posting/:jobid', component: UpdateJobPostingComponent },
 
 
   { path: '**', component: PageNotFoundComponent },

@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { JobService } from 'src/app/core/services/job/job.service';
 
 @Component({
-  selector: 'app-add-job-posting',
-  templateUrl: './add-job-posting.component.html',
-  styleUrls: ['./add-job-posting.component.css'],
+  selector: 'app-update-job-posting',
+  templateUrl: './update-job-posting.component.html',
+  styleUrls: ['./update-job-posting.component.css'],
 })
-export class AddJobPostingComponent {
+export class UpdateJobPostingComponent {
   jobForm: FormGroup;
   isSubmitting = false;
   successMessage = '';
@@ -44,6 +44,28 @@ export class AddJobPostingComponent {
     if (storedData) {
       this.userData = JSON.parse(storedData);
     }
+    this.jobId = this.route.snapshot.params['jobid'];
+    this.fetchJobDetails();
+  }
+
+  fetchJobDetails(): void {
+    this.jobService.getJobInfo(this.jobId).subscribe({
+      next: (job) => {
+        this.jobForm.patchValue({
+          ...job,
+          startDate: this.formatDateForInput(job.startDate),
+          endDate: this.formatDateForInput(job.endDate),
+        });
+      },
+      error: (error) => {
+        this.errorMessage = 'Failed to load job details';
+      },
+    });
+  }
+
+  private formatDateForInput(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString().slice(0, 16);
   }
 
   onSubmit(): void {
@@ -56,19 +78,19 @@ export class AddJobPostingComponent {
     const formData = this.jobForm.value;
 
     this.jobService
-      .createJobPosting(formData, this.userData.id)
+      .updateJob(this.userData.id, this.jobId, formData)
       .pipe(
         catchError((error) => {
           this.isSubmitting = false;
           this.errorMessage =
-            error.error?.message || 'Failed to add job posting';
+            error.error?.message || 'Failed to update job posting';
           return throwError(error);
         })
       )
       .subscribe({
         next: () => {
           this.isSubmitting = false;
-          this.successMessage = 'Job posted successfully!';
+          this.successMessage = 'Job posting updated successfully!';
           setTimeout(() => (this.successMessage = ''), 1000);
           setTimeout(() => window.history.back(), 1000);
         },

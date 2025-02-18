@@ -19,9 +19,9 @@ public class JobPostingController {
     private JobPostingService jobPostingService;
 
     // Create a job posting
-    @PostMapping("/create")
+    @PostMapping("/create/{postedById}")
     public ResponseEntity<JobPostingResponse> createJobPosting(@Valid @RequestBody JobPostingRequest request,
-                                                               @RequestParam Long postedById) {
+                                                               @PathVariable Long postedById) {
         return ResponseEntity.ok(jobPostingService.createJobPosting(request, postedById));
     }
 
@@ -52,6 +52,11 @@ public class JobPostingController {
     @GetMapping("/find/{jobId}")
     public ResponseEntity<JobPostingResponse> getJobById(@PathVariable Long jobId) {
         return ResponseEntity.ok(jobPostingService.getJobById(jobId));
+    }
+
+    @PutMapping("update/{updatedUserId}/{jobId}")
+    public ResponseEntity<JobPostingResponse> updateJob(@PathVariable Long jobId, @PathVariable Long updatedUserId, @RequestBody JobPostingRequest request) {
+        return ResponseEntity.ok(jobPostingService.updateJob(jobId, updatedUserId, request));
     }
 
 }
