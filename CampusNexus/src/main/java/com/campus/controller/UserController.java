@@ -2,6 +2,7 @@ package com.campus.controller;
 
 
 import com.campus.entity.User;
+import com.campus.model.DashboardStats;
 import com.campus.model.UserResponse;
 import com.campus.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +62,9 @@ public class UserController {
         return ResponseEntity.ok("Password updated successfully");
     }
 
+    @GetMapping("/stats")
+    public ResponseEntity<DashboardStats> getStats() {
+        return ResponseEntity.ok(userService.getStats());
+    }
 
 }

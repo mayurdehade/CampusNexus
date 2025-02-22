@@ -67,15 +67,9 @@ export class ManageCoordinatorsComponent {
 
   deleteCoordinator(coordinatorId: number): void {
     if (confirm('Are you sure you want to delete this coordinator?')) {
-      this.userService.deleteCoordinator(coordinatorId).subscribe({
-        next: () => {
-          this.coordinators = this.coordinators.filter(
-            (c) => c.id !== coordinatorId
-          );
-          this.filteredCoordinators = [...this.coordinators];
-        },
-        error: (error) => console.error('Error deleting coordinator:', error),
-      });
+      this.userService.deleteCoordinator(coordinatorId).subscribe();
     }
+    this.coordinators = this.coordinators.filter((c) => c.id !== coordinatorId);
+    this.filteredCoordinators = [...this.coordinators];
   }
 }
