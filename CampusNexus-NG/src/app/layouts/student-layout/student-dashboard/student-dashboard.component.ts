@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { FacultyService } from 'src/app/core/services/faculty/faculty.service';
 import { StudentService } from 'src/app/core/services/student/student.service';
 
 interface DashboardStats {
@@ -29,71 +30,41 @@ interface JobPosting {
   styleUrls: ['./student-dashboard.component.css'],
 })
 export class StudentDashboardComponent {
-  studentName = 'John Doe';
-  stats: DashboardStats = {
-    appliedJobs: 0,
-    upcomingInterviews: 0,
-    profileComplete: 0,
-    notifications: 0,
+  studentData: any = {};
+  stats = {
+    totalStudents: 0,
+    activeJobs: 0,
+    totalApplications: 0,
+    totalJobs: 0,
   };
 
-  deadlines: Deadline[] = [];
-  recentJobs: JobPosting[] = [];
-  isLoading = true;
-
-  constructor(private studentService: StudentService, private router: Router) {}
-
-  private loadDashboardData(): void {
-    // this.studentService.getDashboardData().subscribe({
-    //   next: (data) => {
-    //     this.stats = data.stats;
-    //     this.deadlines = data.deadlines;
-    //     this.recentJobs = data.recentJobs;
-    //     this.isLoading = false;
-    //   },
-    //   error: (error) => {
-    //     console.error('Error loading dashboard data:', error);
-    //     this.isLoading = false;
-    //   },
-    // });
-  }
-
-  // Add methods for quick actions
-  updateProfile(): void {
-    // Navigate to profile update page
-  }
-
-  viewApplications(): void {
-    // Navigate to applications page
-  }
-
-  uploadResume(): void {
-    // Handle resume upload
-  }
-
-  viewSchedule(): void {
-    // Navigate to schedule page
-  }
-
-  studentImage: string = '';
-  studentData: Object = {};
+  constructor(private facultyService: FacultyService, private router: Router) {}
 
   ngOnInit(): void {
-    const storedData = localStorage.getItem('student_Data');
-    const storedImage = localStorage.getItem('student_Image');
-
-    if (storedData) {
-      this.studentData = JSON.parse(storedData);
-    }
-
-    if (storedImage) {
-      this.studentImage = storedImage;
-    }
-
-    // if student data not is local storage then don't allow to access dashboard
-    // if (!storedData) {
-    //   this.router.navigate(['/']);
-    // }
+    this.checkUserRole();
     this.loadDashboardData();
+  }
+
+  private checkUserRole(): void {
+    const storedData = localStorage.getItem('student_Data');
+    this.studentData = storedData ? JSON.parse(storedData) : null;
+  }
+
+  private loadDashboardData(): void {
+    this.facultyService.getStats().subscribe({
+      next: (data) => {
+        this.stats = data;
+      },
+      error: (error) => console.error('Error loading stats:', error),
+    });
+  }
+
+  logout(): void {
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([`/dashboard/${route}`]);
   }
 }

@@ -2,8 +2,12 @@ package com.campus.services;
 
 import com.campus.entity.User;
 import com.campus.enums.UserRoles;
+import com.campus.model.DashboardStats;
 import com.campus.model.LoginRequest;
 import com.campus.model.UserResponse;
+import com.campus.repository.JobApplicationRepository;
+import com.campus.repository.JobPostingRepository;
+import com.campus.repository.StudentRepository;
 import com.campus.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +22,15 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private JobPostingRepository jobPostingRepository;
+
+    @Autowired
+    private JobApplicationRepository jobApplicationRepository;
 
 
     public ResponseEntity<?> userAuthentication(LoginRequest loginRequest) {
@@ -103,5 +116,14 @@ public class UserService {
     public List<UserResponse> getAllCoordinators() {
         List<User> coordinators = userRepository.findByRole(UserRoles.COORDINATOR);
         return coordinators.stream().map(coordinator -> new UserResponse(coordinator.getId(), coordinator.getName(), coordinator.getEmail(), coordinator.getRole(), coordinator.isVarified())).toList();
+    }
+
+    public DashboardStats getStats() {
+        DashboardStats stats = new DashboardStats();
+        stats.setTotalStudents(studentRepository.findAll().size());
+        stats.setTotalJobs(jobPostingRepository.findAll().size());
+        stats.setTotalApplications(jobApplicationRepository.findAll().size());
+        stats.setActiveJobs(jobPostingRepository.findByIsActiveTrue().size());
+        return stats;
     }
 }

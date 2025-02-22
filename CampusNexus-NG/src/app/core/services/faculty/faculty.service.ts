@@ -40,4 +40,8 @@ export class FacultyService {
   // updateUserPassword(credentials: {id: number, password: string}):Observable<any> {
   //   return this.http.get(this.baseUrl + '/update-password', credentials);
   // }
+
+  getStats(): Observable<any> {
+    return this.http.get(this.baseUrl + '/stats');
+  }
 }

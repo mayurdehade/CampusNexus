@@ -100,7 +100,7 @@ export class ManageJobApplicationsComponent {
       `"${app.job_title}"`,
       `"${app.companyName}"`,
       `"${app.job_location}"`,
-      app.ctc,
+      `"${app.ctc}"`,
       app.status,
       new Date(app.appliedAt).toLocaleDateString(),
     ]);
